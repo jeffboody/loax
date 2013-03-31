@@ -1,0 +1,19 @@
+TARGET   = libloax_server.a
+LOAX     = loax_server loax_server_gl2 loax_log
+SOURCE   = $(LOAX:%=%.c)
+OBJECTS  = $(SOURCE:.c=.o)
+HFILES   = $(LOAX:%=%.h)
+OPT      = -O2 -Wall
+CFLAGS   = $(OPT) -I. -I.. -DA3D_CLIENT_VERSION=A3D_GLESv2_LOAX
+LDFLAGS  = -lm -L/usr/lib -L../net -lnet -L../a3d -la3d
+AR       = ar
+
+all: $(TARGET)
+
+$(TARGET): $(OBJECTS)
+	$(AR) rcs $@ $(OBJECTS)
+
+clean:
+	rm -f $(OBJECTS) *~ \#*\# $(TARGET)
+
+$(OBJECTS): $(HFILES)

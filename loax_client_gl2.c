@@ -512,12 +512,6 @@ GL_APICALL void GL_APIENTRY glGenBuffers (GLsizei n, GLuint* buffers)
 	SEND_SIZEI(n);
 	FLUSH();
 	RECV_ARRAY_UINT(n, buffers);
-
-	int i;
-	for(i = 0; i < n; ++i)
-	{
-		LOGD("%i: %u", i, buffers[i]);
-	}
 }
 
 GL_APICALL void GL_APIENTRY glGenerateMipmap (GLenum target)

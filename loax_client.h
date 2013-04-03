@@ -29,6 +29,7 @@
 typedef struct
 {
 	net_socket_t* socket_render;
+	int           errno;
 	char* get_string;
 } loax_client_t;
 
@@ -36,5 +37,6 @@ loax_client_t* loax_client_new(void);
 void           loax_client_delete(loax_client_t** _self);
 int            loax_client_size(loax_client_t* self, int* w, int* h);
 int            loax_client_swapbuffers(loax_client_t* self);
+void           loax_client_seterror(loax_client_t* self, int errno);
 
 #endif

@@ -62,6 +62,7 @@ loax_client_t* loax_client_new(void)
 		goto fail_accept;
 	}
 
+	self->errno      = GL_NO_ERROR;
 	self->get_string = NULL;
 
 	// success
@@ -120,4 +121,15 @@ int loax_client_swapbuffers(loax_client_t* self)
 	net_socket_flush(self->socket_render);
 	net_socket_recvall(self->socket_render, (void*) &ret, sizeof(int), &recvd);
 	return ret;
+}
+
+void loax_client_seterror(loax_client_t* self, int errno)
+{
+	assert(self);
+	LOGD("debug errno=0x%X", errno);
+
+	if(self->errno == GL_NO_ERROR)
+	{
+		self->errno = errno;
+	}
 }

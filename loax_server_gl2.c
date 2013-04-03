@@ -22,7 +22,6 @@
  */
 
 // TODO malloc(0)
-// TODO improve error handling
 
 #include <stdlib.h>
 #include <assert.h>
@@ -92,6 +91,7 @@ extern loax_server_t* g_server;
 #define RECV_ARRAY_UINT(s, d)    loax_serialize_recvarrayuint(g_server->socket_render, s, d)
 #define RECV_ARRAY_FLOAT(s, d)   loax_serialize_recvarrayfloat(g_server->socket_render, s, d)
 #define RECV_STRING(d)           loax_serialize_recvstring(g_server->socket_render, d)
+#define SHUTDOWN()               net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR)
 
 /***********************************************************
 * public OPENGL ES2 API                                    *
@@ -298,7 +298,7 @@ void loaxBufferData (void)
 	if(data == NULL)
 	{
 		LOGE("malloc failed");
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 		return;
 	}
 
@@ -326,7 +326,7 @@ void loaxBufferSubData (void)
 	if(data == NULL)
 	{
 		LOGE("malloc failed");
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 		return;
 	}
 
@@ -544,7 +544,7 @@ void loaxDeleteBuffers (void)
 	if(buffers == NULL)
 	{
 		LOGE("malloc failed");
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 		return;
 	}
 
@@ -567,7 +567,7 @@ void loaxDeleteFramebuffers (void)
 	if(framebuffers == NULL)
 	{
 		LOGE("malloc failed");
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 		return;
 	}
 
@@ -602,7 +602,7 @@ void loaxDeleteRenderbuffers (void)
 	if(renderbuffers == NULL)
 	{
 		LOGE("malloc failed");
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 		return;
 	}
 
@@ -637,7 +637,7 @@ void loaxDeleteTextures (void)
 	if(textures == NULL)
 	{
 		LOGE("malloc failed");
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 		return;
 	}
 
@@ -759,7 +759,7 @@ void loaxDrawElements (void)
 		if(indices == NULL)
 		{
 			LOGE("malloc failed");
-			net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+			SHUTDOWN();
 			return;
 		}
 
@@ -869,7 +869,7 @@ void loaxGenBuffers (void)
 	if(buffers == NULL)
 	{
 		LOGE("malloc failed");
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 		return;
 	}
 
@@ -910,7 +910,7 @@ void loaxGenFramebuffers (void)
 	if(framebuffers == NULL)
 	{
 		LOGE("malloc failed");
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 		return;
 	}
 
@@ -933,7 +933,7 @@ void loaxGenRenderbuffers (void)
 	if(renderbuffers == NULL)
 	{
 		LOGE("malloc failed");
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 		return;
 	}
 
@@ -956,7 +956,7 @@ void loaxGenTextures (void)
 	if(textures == NULL)
 	{
 		LOGE("malloc failed");
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 		return;
 	}
 
@@ -989,7 +989,7 @@ void loaxGetActiveAttrib (void)
 	if(name == NULL)
 	{
 		LOGE("malloc failed");
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 		return;
 	}
 
@@ -1025,7 +1025,7 @@ void loaxGetActiveUniform (void)
 	if(name == NULL)
 	{
 		LOGE("malloc failed");
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 		return;
 	}
 
@@ -1054,7 +1054,7 @@ void loaxGetAttachedShaders (void)
 	if(shaders == NULL)
 	{
 		LOGE("malloc failed");
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 		return;
 	}
 
@@ -1098,7 +1098,7 @@ void loaxGetBooleanv (void)
 		if(params == NULL)
 		{
 			LOGE("malloc failed");
-			net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+			SHUTDOWN();
 			return;
 		}
 
@@ -1112,7 +1112,7 @@ void loaxGetBooleanv (void)
 	else
 	{
 		LOGE("invalid c=%u", c);
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 	}
 }
 
@@ -1132,7 +1132,7 @@ void loaxGetBufferParameteriv (void)
 		if(params == NULL)
 		{
 			LOGE("malloc failed");
-			net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+			SHUTDOWN();
 			return;
 		}
 
@@ -1146,7 +1146,7 @@ void loaxGetBufferParameteriv (void)
 	else
 	{
 		LOGE("invalid c=%u", c);
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 	}
 }
 
@@ -1172,7 +1172,7 @@ void loaxGetFloatv (void)
 		if(params == NULL)
 		{
 			LOGE("malloc failed");
-			net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+			SHUTDOWN();
 			return;
 		}
 
@@ -1186,7 +1186,7 @@ void loaxGetFloatv (void)
 	else
 	{
 		LOGE("invalid c=%u", c);
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 	}
 }
 
@@ -1208,7 +1208,7 @@ void loaxGetFramebufferAttachmentParameteriv (void)
 		if(params == NULL)
 		{
 			LOGE("malloc failed");
-			net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+			SHUTDOWN();
 			return;
 		}
 
@@ -1222,7 +1222,7 @@ void loaxGetFramebufferAttachmentParameteriv (void)
 	else
 	{
 		LOGE("invalid c=%u", c);
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 	}
 }
 
@@ -1241,7 +1241,7 @@ void loaxGetIntegerv (void)
 		if(params == NULL)
 		{
 			LOGE("malloc failed");
-			net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+			SHUTDOWN();
 			return;
 		}
 
@@ -1255,7 +1255,7 @@ void loaxGetIntegerv (void)
 	else
 	{
 		LOGE("invalid c=%u", c);
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 	}
 }
 
@@ -1275,7 +1275,7 @@ void loaxGetProgramiv (void)
 		if(params == NULL)
 		{
 			LOGE("malloc failed");
-			net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+			SHUTDOWN();
 			return;
 		}
 
@@ -1289,7 +1289,7 @@ void loaxGetProgramiv (void)
 	else
 	{
 		LOGE("invalid c=%u", c);
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 	}
 }
 
@@ -1310,7 +1310,7 @@ void loaxGetProgramInfoLog (void)
 	if(infolog == NULL)
 	{
 		LOGE("malloc failed");
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 		return;
 	}
 
@@ -1339,7 +1339,7 @@ void loaxGetRenderbufferParameteriv (void)
 		if(params == NULL)
 		{
 			LOGE("malloc failed");
-			net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+			SHUTDOWN();
 			return;
 		}
 
@@ -1353,7 +1353,7 @@ void loaxGetRenderbufferParameteriv (void)
 	else
 	{
 		LOGE("invalid c=%u", c);
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 	}
 }
 
@@ -1373,7 +1373,7 @@ void loaxGetShaderiv (void)
 		if(params == NULL)
 		{
 			LOGE("malloc failed");
-			net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+			SHUTDOWN();
 			return;
 		}
 
@@ -1387,7 +1387,7 @@ void loaxGetShaderiv (void)
 	else
 	{
 		LOGE("invalid c=%u", c);
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 	}
 }
 
@@ -1408,7 +1408,7 @@ void loaxGetShaderInfoLog (void)
 	if(infolog == NULL)
 	{
 		LOGE("malloc failed");
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 		return;
 	}
 
@@ -1456,7 +1456,7 @@ void loaxGetShaderSource (void)
 	if(source == NULL)
 	{
 		LOGE("malloc failed");
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 		return;
 	}
 
@@ -1498,7 +1498,7 @@ void loaxGetTexParameterfv (void)
 		if(params == NULL)
 		{
 			LOGE("malloc failed");
-			net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+			SHUTDOWN();
 			return;
 		}
 
@@ -1512,7 +1512,7 @@ void loaxGetTexParameterfv (void)
 	else
 	{
 		LOGE("invalid c=%u", c);
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 	}
 }
 
@@ -1532,7 +1532,7 @@ void loaxGetTexParameteriv (void)
 		if(params == NULL)
 		{
 			LOGE("malloc failed");
-			net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+			SHUTDOWN();
 			return;
 		}
 
@@ -1546,7 +1546,7 @@ void loaxGetTexParameteriv (void)
 	else
 	{
 		LOGE("invalid c=%u", c);
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 	}
 }
 
@@ -1594,7 +1594,7 @@ void loaxGetVertexAttribfv (void)
 		if(params == NULL)
 		{
 			LOGE("malloc failed");
-			net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+			SHUTDOWN();
 			return;
 		}
 
@@ -1608,7 +1608,7 @@ void loaxGetVertexAttribfv (void)
 	else
 	{
 		LOGE("invalid c=%u", c);
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 	}
 }
 
@@ -1628,7 +1628,7 @@ void loaxGetVertexAttribiv (void)
 		if(params == NULL)
 		{
 			LOGE("malloc failed");
-			net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+			SHUTDOWN();
 			return;
 		}
 
@@ -1642,7 +1642,7 @@ void loaxGetVertexAttribiv (void)
 	else
 	{
 		LOGE("invalid c=%u", c);
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 	}
 }
 
@@ -1834,7 +1834,7 @@ void loaxReadPixels (void)
 		if(pixels == NULL)
 		{
 			LOGE("malloc failed");
-			net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+			SHUTDOWN();
 			return;
 		}
 
@@ -1848,7 +1848,7 @@ void loaxReadPixels (void)
 	else
 	{
 		LOGE("invalid bpp=%u, width=%u, height=%u", bpp, width, height);
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 	}
 }
 
@@ -2056,7 +2056,7 @@ void loaxTexImage2D (void)
 		if(pixels == NULL)
 		{
 			LOGE("malloc failed");
-			net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+			SHUTDOWN();
 			return;
 		}
 
@@ -2070,7 +2070,7 @@ void loaxTexImage2D (void)
 	else
 	{
 		LOGE("invalid bpp=%u, width=%u, height=%u", bpp, width, height);
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 	}
 }
 
@@ -2106,7 +2106,7 @@ void loaxTexParameterfv (void)
 		if(params == NULL)
 		{
 			LOGE("malloc failed");
-			net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+			SHUTDOWN();
 			return;
 		}
 
@@ -2120,7 +2120,7 @@ void loaxTexParameterfv (void)
 	else
 	{
 		LOGE("invalid c=%u", c);
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 	}
 }
 
@@ -2156,7 +2156,7 @@ void loaxTexParameteriv (void)
 		if(params == NULL)
 		{
 			LOGE("malloc failed");
-			net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+			SHUTDOWN();
 			return;
 		}
 
@@ -2170,7 +2170,7 @@ void loaxTexParameteriv (void)
 	else
 	{
 		LOGE("invalid c=%u", c);
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 	}
 }
 
@@ -2203,7 +2203,7 @@ void loaxTexSubImage2D (void)
 		if(pixels == NULL)
 		{
 			LOGE("malloc failed");
-			net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+			SHUTDOWN();
 			return;
 		}
 
@@ -2217,7 +2217,7 @@ void loaxTexSubImage2D (void)
 	else
 	{
 		LOGE("invalid bpp=%u, width=%u, height=%u", bpp, width, height);
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 	}
 }
 
@@ -2250,7 +2250,7 @@ void loaxUniform1fv (void)
 		if(v == NULL)
 		{
 			LOGE("malloc failed");
-			net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+			SHUTDOWN();
 			return;
 		}
 
@@ -2264,7 +2264,7 @@ void loaxUniform1fv (void)
 	else
 	{
 		LOGE("invalid count=%u", count);
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 	}
 }
 
@@ -2297,7 +2297,7 @@ void loaxUniform1iv (void)
 		if(v == NULL)
 		{
 			LOGE("malloc failed");
-			net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+			SHUTDOWN();
 			return;
 		}
 
@@ -2311,7 +2311,7 @@ void loaxUniform1iv (void)
 	else
 	{
 		LOGE("invalid count=%u", count);
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 	}
 }
 
@@ -2346,7 +2346,7 @@ void loaxUniform2fv (void)
 		if(v == NULL)
 		{
 			LOGE("malloc failed");
-			net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+			SHUTDOWN();
 			return;
 		}
 
@@ -2360,7 +2360,7 @@ void loaxUniform2fv (void)
 	else
 	{
 		LOGE("invalid count=%u", count);
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 	}
 }
 
@@ -2395,7 +2395,7 @@ void loaxUniform2iv (void)
 		if(v == NULL)
 		{
 			LOGE("malloc failed");
-			net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+			SHUTDOWN();
 			return;
 		}
 
@@ -2409,7 +2409,7 @@ void loaxUniform2iv (void)
 	else
 	{
 		LOGE("invalid count=%u", count);
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 	}
 }
 
@@ -2446,7 +2446,7 @@ void loaxUniform3fv (void)
 		if(v == NULL)
 		{
 			LOGE("malloc failed");
-			net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+			SHUTDOWN();
 			return;
 		}
 
@@ -2460,7 +2460,7 @@ void loaxUniform3fv (void)
 	else
 	{
 		LOGE("invalid count=%u", count);
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 	}
 }
 
@@ -2497,7 +2497,7 @@ void loaxUniform3iv (void)
 		if(v == NULL)
 		{
 			LOGE("malloc failed");
-			net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+			SHUTDOWN();
 			return;
 		}
 
@@ -2511,7 +2511,7 @@ void loaxUniform3iv (void)
 	else
 	{
 		LOGE("invalid count=%u", count);
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 	}
 }
 
@@ -2550,7 +2550,7 @@ void loaxUniform4fv (void)
 		if(v == NULL)
 		{
 			LOGE("malloc failed");
-			net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+			SHUTDOWN();
 			return;
 		}
 
@@ -2564,7 +2564,7 @@ void loaxUniform4fv (void)
 	else
 	{
 		LOGE("invalid count=%u", count);
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 	}
 }
 
@@ -2603,7 +2603,7 @@ void loaxUniform4iv (void)
 		if(v == NULL)
 		{
 			LOGE("malloc failed");
-			net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+			SHUTDOWN();
 			return;
 		}
 
@@ -2617,7 +2617,7 @@ void loaxUniform4iv (void)
 	else
 	{
 		LOGE("invalid count=%u", count);
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 	}
 }
 
@@ -2638,7 +2638,7 @@ void loaxUniformMatrix2fv (void)
 		if(v == NULL)
 		{
 			LOGE("malloc failed");
-			net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+			SHUTDOWN();
 			return;
 		}
 
@@ -2652,7 +2652,7 @@ void loaxUniformMatrix2fv (void)
 	else
 	{
 		LOGE("invalid count=%u", count);
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 	}
 }
 
@@ -2673,7 +2673,7 @@ void loaxUniformMatrix3fv (void)
 		if(v == NULL)
 		{
 			LOGE("malloc failed");
-			net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+			SHUTDOWN();
 			return;
 		}
 
@@ -2687,7 +2687,7 @@ void loaxUniformMatrix3fv (void)
 	else
 	{
 		LOGE("invalid count=%u", count);
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 	}
 }
 
@@ -2708,7 +2708,7 @@ void loaxUniformMatrix4fv (void)
 		if(v == NULL)
 		{
 			LOGE("malloc failed");
-			net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+			SHUTDOWN();
 			return;
 		}
 
@@ -2722,7 +2722,7 @@ void loaxUniformMatrix4fv (void)
 	else
 	{
 		LOGE("invalid count=%u", count);
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 	}
 }
 
@@ -2775,7 +2775,7 @@ void loaxVertexAttrib1fv (void)
 	if(values == NULL)
 	{
 		LOGE("malloc failed");
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 		return;
 	}
 
@@ -2814,7 +2814,7 @@ void loaxVertexAttrib2fv (void)
 	if(values == NULL)
 	{
 		LOGE("malloc failed");
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 		return;
 	}
 
@@ -2855,7 +2855,7 @@ void loaxVertexAttrib3fv (void)
 	if(values == NULL)
 	{
 		LOGE("malloc failed");
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 		return;
 	}
 
@@ -2898,7 +2898,7 @@ void loaxVertexAttrib4fv (void)
 	if(values == NULL)
 	{
 		LOGE("malloc failed");
-		net_socket_shutdown(g_server->socket_render, NET_SOCKET_SHUT_RDWR);
+		SHUTDOWN();
 		return;
 	}
 

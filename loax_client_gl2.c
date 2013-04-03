@@ -90,6 +90,7 @@ extern loax_client_t* g_client;
 #define RECV_ARRAY_UINT(s, d)    loax_serialize_recvarrayuint(g_client->socket_render, s, d)
 #define RECV_ARRAY_FLOAT(s, d)   loax_serialize_recvarrayfloat(g_client->socket_render, s, d)
 #define RECV_STRING(d)           loax_serialize_recvstring(g_client->socket_render, d)
+#define SET_ERROR(errno)         loax_client_seterror(g_client, errno)
 
 /***********************************************************
 * public OPENGL ES2 API                                    *
@@ -449,6 +450,10 @@ GL_APICALL void GL_APIENTRY glDrawElements (GLenum mode, GLsizei count, GLenum t
 		SEND_ENUM(type);
 		SEND_ARRAY_VOID(count*b, indices);
 	}
+	else
+	{
+		SET_ERROR(GL_INVALID_VALUE);
+	}
 }
 
 GL_APICALL void GL_APIENTRY glEnable (GLenum cap)
@@ -645,6 +650,10 @@ GL_APICALL void GL_APIENTRY glGetBooleanv (GLenum pname, GLboolean* params)
 		FLUSH();
 		RECV_ARRAY_BOOLEAN(c, params);
 	}
+	else
+	{
+		SET_ERROR(GL_INVALID_ENUM);
+	}
 }
 
 GL_APICALL void GL_APIENTRY glGetBufferParameteriv (GLenum target, GLenum pname, GLint* params)
@@ -659,6 +668,10 @@ GL_APICALL void GL_APIENTRY glGetBufferParameteriv (GLenum target, GLenum pname,
 		FLUSH();
 		RECV_ARRAY_INT(c, params);
 	}
+	else
+	{
+		SET_ERROR(GL_INVALID_ENUM);
+	}
 }
 
 GL_APICALL GLenum GL_APIENTRY glGetError (void)
@@ -667,7 +680,12 @@ GL_APICALL GLenum GL_APIENTRY glGetError (void)
 	SEND_INT(LOAX_GetError);
 	GLenum error = GL_OUT_OF_MEMORY;
 	FLUSH();
-	return RECV_ENUM(&error) ? error : GL_OUT_OF_MEMORY;
+	if((RECV_ENUM(&error) == 0) || (error == GL_NO_ERROR))
+	{
+		error = self->errno;
+	}
+	self->errno = GL_NO_ERROR;
+	return error;
 }
 
 GL_APICALL void GL_APIENTRY glGetFloatv (GLenum pname, GLfloat* params)
@@ -681,6 +699,10 @@ GL_APICALL void GL_APIENTRY glGetFloatv (GLenum pname, GLfloat* params)
 		SEND_ENUM(pname);
 		FLUSH();
 		RECV_ARRAY_FLOAT(c, params);
+	}
+	else
+	{
+		SET_ERROR(GL_INVALID_ENUM);
 	}
 }
 
@@ -697,6 +719,10 @@ GL_APICALL void GL_APIENTRY glGetFramebufferAttachmentParameteriv (GLenum target
 		FLUSH();
 		RECV_ARRAY_INT(c, params);
 	}
+	else
+	{
+		SET_ERROR(GL_INVALID_ENUM);
+	}
 }
 
 GL_APICALL void GL_APIENTRY glGetIntegerv (GLenum pname, GLint* params)
@@ -711,6 +737,10 @@ GL_APICALL void GL_APIENTRY glGetIntegerv (GLenum pname, GLint* params)
 		FLUSH();
 		RECV_ARRAY_INT(c, params);
 	}
+	else
+	{
+		SET_ERROR(GL_INVALID_ENUM);
+	}
 }
 
 GL_APICALL void GL_APIENTRY glGetProgramiv (GLuint program, GLenum pname, GLint* params)
@@ -724,6 +754,10 @@ GL_APICALL void GL_APIENTRY glGetProgramiv (GLuint program, GLenum pname, GLint*
 		SEND_ENUM(pname);
 		FLUSH();
 		RECV_ARRAY_INT(c, params);
+	}
+	else
+	{
+		SET_ERROR(GL_INVALID_ENUM);
 	}
 }
 
@@ -763,6 +797,10 @@ GL_APICALL void GL_APIENTRY glGetRenderbufferParameteriv (GLenum target, GLenum 
 		FLUSH();
 		RECV_ARRAY_INT(c, params);
 	}
+	else
+	{
+		SET_ERROR(GL_INVALID_ENUM);
+	}
 }
 
 GL_APICALL void GL_APIENTRY glGetShaderiv (GLuint shader, GLenum pname, GLint* params)
@@ -776,6 +814,10 @@ GL_APICALL void GL_APIENTRY glGetShaderiv (GLuint shader, GLenum pname, GLint* p
 		SEND_ENUM(pname);
 		FLUSH();
 		RECV_ARRAY_INT(c, params);
+	}
+	else
+	{
+		SET_ERROR(GL_INVALID_ENUM);
 	}
 }
 
@@ -865,6 +907,10 @@ GL_APICALL void GL_APIENTRY glGetTexParameterfv (GLenum target, GLenum pname, GL
 		FLUSH();
 		RECV_ARRAY_FLOAT(c, params);
 	}
+	else
+	{
+		SET_ERROR(GL_INVALID_ENUM);
+	}
 }
 
 GL_APICALL void GL_APIENTRY glGetTexParameteriv (GLenum target, GLenum pname, GLint* params)
@@ -878,6 +924,10 @@ GL_APICALL void GL_APIENTRY glGetTexParameteriv (GLenum target, GLenum pname, GL
 		SEND_ENUM(pname);
 		FLUSH();
 		RECV_ARRAY_INT(c, params);
+	}
+	else
+	{
+		SET_ERROR(GL_INVALID_ENUM);
 	}
 }
 
@@ -916,6 +966,10 @@ GL_APICALL void GL_APIENTRY glGetVertexAttribfv (GLuint index, GLenum pname, GLf
 		FLUSH();
 		RECV_ARRAY_FLOAT(c, params);
 	}
+	else
+	{
+		SET_ERROR(GL_INVALID_ENUM);
+	}
 }
 
 GL_APICALL void GL_APIENTRY glGetVertexAttribiv (GLuint index, GLenum pname, GLint* params)
@@ -929,6 +983,10 @@ GL_APICALL void GL_APIENTRY glGetVertexAttribiv (GLuint index, GLenum pname, GLi
 		SEND_ENUM(pname);
 		FLUSH();
 		RECV_ARRAY_INT(c, params);
+	}
+	else
+	{
+		SET_ERROR(GL_INVALID_ENUM);
 	}
 }
 
@@ -1062,6 +1120,10 @@ GL_APICALL void GL_APIENTRY glReadPixels (GLint x, GLint y, GLsizei width, GLsiz
 		FLUSH();
 		RECV_ARRAY_VOID(bpp*width*height, pixels);
 	}
+	else
+	{
+		SET_ERROR(GL_INVALID_ENUM);
+	}
 }
 
 GL_APICALL void GL_APIENTRY glReleaseShaderCompiler (void)
@@ -1190,6 +1252,10 @@ GL_APICALL void GL_APIENTRY glTexImage2D (GLenum target, GLint level, GLint inte
 		SEND_ENUM(type);
 		SEND_ARRAY_VOID(bpp*width*height, pixels);
 	}
+	else
+	{
+		SET_ERROR(GL_INVALID_ENUM);
+	}
 }
 
 GL_APICALL void GL_APIENTRY glTexParameterf (GLenum target, GLenum pname, GLfloat param)
@@ -1211,6 +1277,10 @@ GL_APICALL void GL_APIENTRY glTexParameterfv (GLenum target, GLenum pname, const
 		SEND_ENUM(target);
 		SEND_ENUM(pname);
 		SEND_ARRAY_FLOAT(count, params);
+	}
+	else
+	{
+		SET_ERROR(GL_INVALID_ENUM);
 	}
 }
 
@@ -1234,6 +1304,10 @@ GL_APICALL void GL_APIENTRY glTexParameteriv (GLenum target, GLenum pname, const
 		SEND_ENUM(pname);
 		SEND_ARRAY_INT(count, params);
 	}
+	else
+	{
+		SET_ERROR(GL_INVALID_ENUM);
+	}
 }
 
 GL_APICALL void GL_APIENTRY glTexSubImage2D (GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid* pixels)
@@ -1252,6 +1326,10 @@ GL_APICALL void GL_APIENTRY glTexSubImage2D (GLenum target, GLint level, GLint x
 		SEND_ENUM(format);
 		SEND_ENUM(type);
 		SEND_ARRAY_VOID(bpp*width*height, pixels);
+	}
+	else
+	{
+		SET_ERROR(GL_INVALID_ENUM);
 	}
 }
 
@@ -1526,6 +1604,11 @@ GL_APICALL void GL_APIENTRY glVertexAttribPointer (GLuint indx, GLint size, GLen
 		SEND_BOOLEAN(normalized);
 		SEND_SIZEI(stride);
 		SEND_VOIDPTR(ptr);
+	}
+	else
+	{
+		// TODO - glVertexAttribPointer
+		SET_ERROR(GL_INVALID_VALUE);
 	}
 }
 

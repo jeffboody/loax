@@ -234,7 +234,6 @@ unsigned int loax_serialize_bytesDrawElements(unsigned int type)
 	else
 	{
 		LOGE("invalid type=0x%X", type);
-		assert(0);
 		return 0;
 	}
 }
@@ -340,7 +339,6 @@ unsigned int loax_serialize_countGetBooleanv(unsigned int pname)
 		// GL_COMPRESSED_TEXTURE_FORMATS,
 		// GL_SHADER_BINARY_FORMATS
 		LOGE("invalid pname=0x%X", pname);
-		assert(0);
 		return 0;
 	}
 }
@@ -355,7 +353,6 @@ unsigned int loax_serialize_countGetBufferParameteriv(unsigned int pname)
 	else
 	{
 		LOGE("invalid pname=0x%X", pname);
-		assert(0);
 		return 0;
 	}
 }
@@ -372,7 +369,6 @@ unsigned int loax_serialize_countGetFramebufferAttachmentParameteriv(unsigned in
 	else
 	{
 		LOGE("invalid pname=0x%X", pname);
-		assert(0);
 		return 0;
 	}
 }
@@ -394,7 +390,6 @@ unsigned int loax_serialize_countGetProgramiv(unsigned int pname)
 	else
 	{
 		LOGE("invalid pname=0x%X", pname);
-		assert(0);
 		return 0;
 	}
 }
@@ -416,7 +411,6 @@ unsigned int loax_serialize_countGetRenderbufferParameteriv(unsigned int pname)
 	else
 	{
 		LOGE("invalid pname=0x%X", pname);
-		assert(0);
 		return 0;
 	}
 }
@@ -434,7 +428,6 @@ unsigned int loax_serialize_countGetShaderiv(unsigned int pname)
 	else
 	{
 		LOGE("invalid pname=0x%X", pname);
-		assert(0);
 		return 0;
 	}
 }
@@ -451,7 +444,6 @@ unsigned int loax_serialize_countGetTexParameter(unsigned int pname)
 	else
 	{
 		LOGE("invalid pname=0x%X", pname);
-		assert(0);
 		return 0;
 	}
 }
@@ -475,7 +467,6 @@ unsigned int loax_serialize_countGetVertexAttrib(unsigned int pname)
 	else
 	{
 		LOGE("invalid pname=0x%X", pname);
-		assert(0);
 		return 0;
 	}
 }
@@ -509,7 +500,6 @@ unsigned int loax_serialize_bppReadPixels(unsigned int format, unsigned int type
 	else
 	{
 		LOGE("invalid format=0x%X, type=0x%X", format, type);
-		assert(0);
 		return 0;
 	}
 }
@@ -551,7 +541,6 @@ unsigned int loax_serialize_bppTexImage(unsigned int format, unsigned int type)
 	else
 	{
 		LOGE("invalid format=0x%X, type=0x%X", format, type);
-		assert(0);
 		return 0;
 	}
 }
@@ -568,7 +557,6 @@ unsigned int loax_serialize_countTexParameter(unsigned int pname)
 	else
 	{
 		LOGE("invalid pname=0x%X", pname);
-		assert(0);
 		return 0;
 	}
 }

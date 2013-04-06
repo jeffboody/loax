@@ -25,6 +25,7 @@
 #include <assert.h>
 #include "loax_client.h"
 #include "loax_gl2.h"
+#include "gl2.h"
 
 #define LOG_TAG "loax"
 #include "loax_log.h"

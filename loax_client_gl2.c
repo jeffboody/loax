@@ -676,15 +676,17 @@ GL_APICALL void GL_APIENTRY glGetBufferParameteriv (GLenum target, GLenum pname,
 
 GL_APICALL GLenum GL_APIENTRY glGetError (void)
 {
+	assert(g_client);
 	LOGD("debug");
+
 	SEND_INT(LOAX_GetError);
 	GLenum error = GL_OUT_OF_MEMORY;
 	FLUSH();
 	if((RECV_ENUM(&error) == 0) || (error == GL_NO_ERROR))
 	{
-		error = self->errno;
+		error = g_client->errno;
 	}
-	self->errno = GL_NO_ERROR;
+	g_client->errno = GL_NO_ERROR;
 	return error;
 }
 

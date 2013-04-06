@@ -1170,7 +1170,9 @@ GL_APICALL void GL_APIENTRY glShaderBinary (GLsizei n, const GLuint* shaders, GL
 
 GL_APICALL void GL_APIENTRY glShaderSource (GLuint shader, GLsizei count, const GLchar** string, const GLint* length)
 {
+	assert(g_client);
 	LOGD("debug");
+
 	// TODO count, length and cannot assume strings are terminated?
 	if(count != 1)
 	{

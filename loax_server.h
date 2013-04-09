@@ -32,11 +32,14 @@ typedef struct
 	int h;
 	int swapping;
 	net_socket_t* socket_render;
+	net_socket_t* socket_event;
 } loax_server_t;
 
 loax_server_t* loax_server_new(void);
 void           loax_server_delete(loax_server_t** _self);
 void           loax_server_resize(loax_server_t* self, int w, int h);
+void           loax_server_keydown(loax_server_t* self, int keycode, int meta);
+void           loax_server_keyup(loax_server_t* self, int keycode, int meta);
 // TODO return value?
 int            loax_server_draw(loax_server_t* self);
 

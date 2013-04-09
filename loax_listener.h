@@ -21,68 +21,33 @@
  *
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include "loax/loax_client.h"
-#include "loax/loax_gl2.h"
-#include "loax/gl2.h"
+#ifndef loax_listener_H
+#define loax_listener_H
 
-#define LOG_TAG "loax"
-#include "loax/loax_log.h"
+#include <pthread.h>
+#include "net/net_socket.h"
+#include "loax_event.h"
 
-int main(int argc, char** argv)
+#define LOAX_LISTENER_BUFSIZE 256
+
+typedef struct
 {
-	int w;
-	int h;
-	loax_client_t* c = loax_client_new();
-	if(c == NULL)
-	{
-		return EXIT_FAILURE;
-	}
+	// event state
+	pthread_mutex_t event_mutex;
+	pthread_cond_t  event_cond;
+	int             event_head;
+	int             event_tail;
+	loax_event_t    event_buffer[LOAX_LISTENER_BUFSIZE];
 
-	loax_client_size(c, &w, &h);
-	glViewport(0, 0, w, h);
+	// listener state
+	net_socket_t*  socket_event;
+	net_socket_t*  socket_listen;
+	int            thread_cancel;
+	pthread_t      thread;
+} loax_listener_t;
 
-	int idx = 0;
-	float mode = 1.0f;
-	float color[3] = { 0.0f, 0.0f, 0.0f };
-	do
-	{
-		loax_event_t e;
-		while(loax_client_poll(c, &e))
-		{
-			if(e.type == LOAX_EVENT_RESIZE)
-			{
-				glViewport(0, 0, e.event_resize.w, e.event_resize.h);
-			}
-		}
+loax_listener_t* loax_listener_new(void);
+void             loax_listener_delete(loax_listener_t** _self);
+int              loax_listener_poll(loax_listener_t* self, loax_event_t* e);
 
-		glClearColor(color[0], color[1], color[2], 1.0f);
-
-		// update next color
-		color[idx] += mode * 0.1f;
-		if(color[idx] > 1.0f)
-		{
-			color[idx] = 1.0f;
-			++idx;
-		}
-		else if(color[idx] < 0.0f)
-		{
-			color[idx] = 0.0f;
-			++idx;
-		}
-
-		// check for rollover
-		if(idx == 3)
-		{
-			idx = 0;
-			mode *= -1.0f;
-		}
-
-		glClear(GL_COLOR_BUFFER_BIT);
-	} while(loax_client_swapbuffers(c));
-
-	loax_client_delete(&c);
-
-	return EXIT_SUCCESS;
-}
+#endif

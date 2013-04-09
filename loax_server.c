@@ -24,6 +24,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include "gl2.h"
+#include "loax_event.h"
 #include "loax_gl2.h"
 #include "loax_server.h"
 #include "loax_server_gl2.h"
@@ -212,7 +213,13 @@ loax_server_t* loax_server_new(void)
 	self->socket_render = net_socket_connect("localhost", "6120", NET_SOCKET_TCP_NODELAY);
 	if(self->socket_render == NULL)
 	{
-		goto fail_socket;
+		goto fail_render;
+	}
+
+	self->socket_event = net_socket_connect("localhost", "6121", NET_SOCKET_TCP_NODELAY);
+	if(self->socket_event == NULL)
+	{
+		goto fail_event;
 	}
 
 	// success
@@ -220,7 +227,9 @@ loax_server_t* loax_server_new(void)
 	return self;
 
 	// failure
-	fail_socket:
+	fail_event:
+		net_socket_close(&self->socket_render);
+	fail_render:
 		free(self);
 	return NULL;
 }
@@ -233,6 +242,7 @@ void loax_server_delete(loax_server_t** _self)
 	if(self)
 	{
 		LOGD("debug");
+		net_socket_close(&self->socket_event);
 		net_socket_close(&self->socket_render);
 		free(self);
 		*_self = NULL;
@@ -247,8 +257,51 @@ void loax_server_resize(loax_server_t* self, int w, int h)
 
 	self->w = w;
 	self->h = h;
-	// TODO send event
-	glViewport(0, 0, w, h);
+
+	loax_event_t e =
+	{
+		.type         = LOAX_EVENT_RESIZE,
+		.event_resize =
+		{
+			.w = w,
+			.h = h,
+		}
+	};
+	net_socket_sendall(self->socket_event, (const void*) &e, sizeof(loax_event_t));
+}
+
+void loax_server_keydown(loax_server_t* self, int keycode, int meta)
+{
+	assert(self);
+	LOGD("debug keycode=0x%X, meta=0x%X", keycode, meta);
+
+	loax_event_t e =
+	{
+		.type      = LOAX_EVENT_KEYDOWN,
+		.event_key =
+		{
+			.keycode = keycode,
+			.meta    = meta,
+		}
+	};
+	net_socket_sendall(self->socket_event, (const void*) &e, sizeof(loax_event_t));
+}
+
+void loax_server_keyup(loax_server_t* self, int keycode, int meta)
+{
+	assert(self);
+	LOGD("debug keycode=0x%X, meta=0x%X", keycode, meta);
+
+	loax_event_t e =
+	{
+		.type      = LOAX_EVENT_KEYUP,
+		.event_key =
+		{
+			.keycode = keycode,
+			.meta    = meta,
+		}
+	};
+	net_socket_sendall(self->socket_event, (const void*) &e, sizeof(loax_event_t));
 }
 
 int loax_server_draw(loax_server_t* self)

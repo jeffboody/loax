@@ -62,6 +62,13 @@ loax_client_t* loax_client_new(void)
 	{
 		goto fail_accept;
 	}
+	net_socket_close(&listen);
+
+	self->listener = loax_listener_new();
+	if(self->listener == NULL)
+	{
+		goto fail_listener;
+	}
 
 	self->errno      = GL_NO_ERROR;
 	self->get_string = NULL;
@@ -71,6 +78,8 @@ loax_client_t* loax_client_new(void)
 	return self;
 
 	// failure
+	fail_listener:
+		net_socket_close(&self->socket_render);
 	fail_accept:
 		net_socket_close(&listen);
 	fail_listen:
@@ -87,6 +96,7 @@ void loax_client_delete(loax_client_t** _self)
 	{
 		LOGD("debug\n");
 		free(self->get_string);
+		loax_listener_delete(&self->listener);
 		net_socket_close(&self->socket_render);
 		free(self);
 		*_self = NULL;
@@ -122,6 +132,13 @@ int loax_client_swapbuffers(loax_client_t* self)
 	net_socket_flush(self->socket_render);
 	net_socket_recvall(self->socket_render, (void*) &ret, sizeof(int), &recvd);
 	return ret;
+}
+
+int loax_client_poll(loax_client_t* self, loax_event_t* e)
+{
+	assert(self);
+	LOGD("debug");
+	return loax_listener_poll(self->listener, e);
 }
 
 void loax_client_seterror(loax_client_t* self, int errno)

@@ -267,7 +267,9 @@ void loax_server_resize(loax_server_t* self, int w, int h)
 			.h = h,
 		}
 	};
-	net_socket_sendall(self->socket_event, (const void*) &e, sizeof(loax_event_t));
+
+	int size = sizeof(int) + sizeof(loax_eventresize_t);
+	net_socket_sendall(self->socket_event, (const void*) &e, size);
 }
 
 void loax_server_keydown(loax_server_t* self, int keycode, int meta)
@@ -284,7 +286,9 @@ void loax_server_keydown(loax_server_t* self, int keycode, int meta)
 			.meta    = meta,
 		}
 	};
-	net_socket_sendall(self->socket_event, (const void*) &e, sizeof(loax_event_t));
+
+	int size = sizeof(int) + sizeof(loax_eventkey_t);
+	net_socket_sendall(self->socket_event, (const void*) &e, size);
 }
 
 void loax_server_keyup(loax_server_t* self, int keycode, int meta)
@@ -301,7 +305,9 @@ void loax_server_keyup(loax_server_t* self, int keycode, int meta)
 			.meta    = meta,
 		}
 	};
-	net_socket_sendall(self->socket_event, (const void*) &e, sizeof(loax_event_t));
+
+	int size = sizeof(int) + sizeof(loax_eventkey_t);
+	net_socket_sendall(self->socket_event, (const void*) &e, size);
 }
 
 int loax_server_draw(loax_server_t* self)

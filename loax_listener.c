@@ -38,14 +38,43 @@ static void* loax_listener_thread(void* _self)
 	LOGD("debug");
 
 	loax_listener_t* self = (loax_listener_t*) _self;
-	int recvd = 0;
-	while(net_socket_recvall(self->socket_event,
-	                         (void*) &self->event_buffer[self->event_tail],
-	                         sizeof(loax_event_t), &recvd))
+	int   recvd = 0;
+	int   ok    = 1;
+	int*  type  = &self->event_buffer[self->event_tail].type;
+	void* event = (void*) &self->event_buffer[self->event_tail].event_key;
+	while(net_socket_recvall(self->socket_event, (void*) type,
+	                         sizeof(int), &recvd))
 	{
+		if(*type == LOAX_EVENT_RESIZE)
+		{
+			ok &= net_socket_recvall(self->socket_event, event,
+			                         sizeof(loax_eventresize_t),
+			                         &recvd);
+		}
+		else if((*type == LOAX_EVENT_KEYDOWN) ||
+		        (*type == LOAX_EVENT_KEYUP))
+		{
+			ok &= net_socket_recvall(self->socket_event, event,
+			                         sizeof(loax_eventkey_t),
+			                         &recvd);
+		}
+		else
+		{
+			net_socket_shutdown(self->socket_event, NET_SOCKET_SHUT_RDWR);
+			LOGE("invalid type=%i", type);
+			break;
+		}
+
+		if(ok == 0)
+		{
+			break;
+		}
+
 		pthread_mutex_lock(&self->event_mutex);
 
 		self->event_tail = (self->event_tail + 1) % LOAX_LISTENER_BUFSIZE;
+		type  = &self->event_buffer[self->event_tail].type;
+		event = (void*) &self->event_buffer[self->event_tail].event_key;
 
 		if(self->thread_cancel == 1)
 		{

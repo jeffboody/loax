@@ -193,6 +193,14 @@ static loax_function_cb loax_function_map[] =
 };
 
 /***********************************************************
+* private - Android conversions                            *
+***********************************************************/
+
+#define LOAX_ANDROID_MOTION_ACTION_DOWN 0
+#define LOAX_ANDROID_MOTION_ACTION_UP   1
+#define LOAX_ANDROID_MOTION_ACTION_MOVE 2
+
+/***********************************************************
 * public                                                   *
 ***********************************************************/
 
@@ -307,6 +315,64 @@ void loax_server_keyup(loax_server_t* self, int keycode, int meta)
 	};
 
 	int size = sizeof(int) + sizeof(loax_eventkey_t);
+	net_socket_sendall(self->socket_event, (const void*) &e, size);
+}
+
+void loax_server_touch(loax_server_t* self, int action, int count, float* coord)
+{
+	assert(self);
+	assert(coord);
+	LOGD("debug action=%i, count=%i, x0=%0.1f, y0=%0.1f, x1=%0.1f, y1=%0.1f",
+	     action, count, coord[0], coord[1], coord[2], coord[3]);
+
+	int type;
+	if(action == LOAX_ANDROID_MOTION_ACTION_DOWN)
+	{
+		type = LOAX_EVENT_TOUCHDOWN;
+	}
+	else if(action == LOAX_ANDROID_MOTION_ACTION_UP)
+	{
+		type = LOAX_EVENT_TOUCHUP;
+	}
+	else if(action == LOAX_ANDROID_MOTION_ACTION_MOVE)
+	{
+		type = LOAX_EVENT_TOUCHMOVE;
+	}
+	else
+	{
+		// ignore depreciated actions
+		return;
+	}
+
+	if(count < 1)
+	{
+		LOGW("invalid count=%i", count);
+		return;
+	}
+
+	if(count > LOAX_EVENT_TOUCHMAX)
+	{
+		// silently clamp to the max touch events
+		count = LOAX_EVENT_TOUCHMAX;
+	}
+
+	loax_event_t e =
+	{
+		.type = type,
+		.event_touch =
+		{
+			.count = count,
+		}
+	};
+
+	int i;
+	for(i = 0; i < count; ++i)
+	{
+		e.event_touch.coord[i].x = coord[2*i];
+		e.event_touch.coord[i].y = coord[2*i + 1];
+	}
+
+	int size = 2*sizeof(int) + count*sizeof(loax_eventcoord_t);
 	net_socket_sendall(self->socket_event, (const void*) &e, size);
 }
 

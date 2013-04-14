@@ -58,6 +58,28 @@ static void* loax_listener_thread(void* _self)
 			                         sizeof(loax_eventkey_t),
 			                         &recvd);
 		}
+		else if((*type == LOAX_EVENT_TOUCHDOWN) ||
+		        (*type == LOAX_EVENT_TOUCHUP)   ||
+		        (*type == LOAX_EVENT_TOUCHMOVE))
+		{
+			int count = 0;
+			ok &= net_socket_recvall(self->socket_event, (void*) &count,
+			                         sizeof(int),
+			                         &recvd);
+			if((ok == 0) ||
+			   (count < 1) ||
+			   (count > LOAX_EVENT_TOUCHMAX))
+			{
+				net_socket_shutdown(self->socket_event, NET_SOCKET_SHUT_RDWR);
+				LOGE("invalid count=%i", count);
+				break;
+			}
+			self->event_buffer[self->event_tail].event_touch.count = count;
+			event = (void*) self->event_buffer[self->event_tail].event_touch.coord;
+			ok &= net_socket_recvall(self->socket_event, event,
+			                         count*sizeof(loax_eventcoord_t),
+			                         &recvd);
+		}
 		else
 		{
 			net_socket_shutdown(self->socket_event, NET_SOCKET_SHUT_RDWR);

@@ -25,9 +25,15 @@
 #define loax_event_H
 
 // type
-#define LOAX_EVENT_KEYDOWN 0
-#define LOAX_EVENT_KEYUP   1
-#define LOAX_EVENT_RESIZE  2
+#define LOAX_EVENT_KEYDOWN   0
+#define LOAX_EVENT_KEYUP     1
+#define LOAX_EVENT_RESIZE    2
+#define LOAX_EVENT_TOUCHDOWN 3
+#define LOAX_EVENT_TOUCHUP   4
+#define LOAX_EVENT_TOUCHMOVE 5
+
+// max touch events supported
+#define LOAX_EVENT_TOUCHMAX 4
 
 typedef struct
 {
@@ -43,11 +49,24 @@ typedef struct
 
 typedef struct
 {
+	float x;
+	float y;
+} loax_eventcoord_t;
+
+typedef struct
+{
+	int count;
+	loax_eventcoord_t coord[LOAX_EVENT_TOUCHMAX];
+} loax_eventtouch_t;
+
+typedef struct
+{
 	int type;
 	union
 	{
 		loax_eventkey_t    event_key;
 		loax_eventresize_t event_resize;
+		loax_eventtouch_t  event_touch;
 	};
 } loax_event_t;
 

@@ -55,6 +55,13 @@ int main(int argc, char** argv)
 			{
 				glViewport(0, 0, e.event_resize.w, e.event_resize.h);
 			}
+			else if(e.type == LOAX_EVENT_KEYUP)
+			{
+				LOGI("keycode=0x%X, meta=0x%X, key=%c",
+				     e.event_key.keycode,
+				     e.event_key.meta,
+				     (char) e.event_key.keycode);
+			}
 		}
 
 		glClearColor(color[0], color[1], color[2], 1.0f);

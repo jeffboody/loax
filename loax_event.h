@@ -32,6 +32,18 @@
 #define LOAX_EVENT_TOUCHUP   4
 #define LOAX_EVENT_TOUCHMOVE 5
 
+// meta key mask
+#define LOAX_KEY_ALT     0x00000032
+#define LOAX_KEY_ALT_L   0x00000010
+#define LOAX_KEY_ALT_R   0x00000020
+#define LOAX_KEY_CTRL    0x00007000
+#define LOAX_KEY_CTRL_L  0x00002000
+#define LOAX_KEY_CTRL_R  0x00004000
+#define LOAX_KEY_SHIFT   0x000000c1
+#define LOAX_KEY_SHIFT_L 0x00000040
+#define LOAX_KEY_SHIFT_R 0x00000080
+#define LOAX_KEY_CAPS    0x00100000
+
 // max touch events supported
 #define LOAX_EVENT_TOUCHMAX 4
 

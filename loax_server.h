@@ -30,7 +30,6 @@ typedef struct
 {
 	int w;
 	int h;
-	int swapping;
 	net_socket_t* socket_render;
 	net_socket_t* socket_event;
 } loax_server_t;

@@ -42,12 +42,12 @@ loax_client_t* g_client = NULL;
 
 loax_client_t* loax_client_new(void)
 {
-	LOGD("debug\n");
+	LOGD("debug");
 
 	loax_client_t* self = (loax_client_t*) malloc(sizeof(loax_client_t));
 	if(self == NULL)
 	{
-		LOGE("malloc failed\n");
+		LOGE("malloc failed");
 		return NULL;
 	}
 
@@ -94,7 +94,7 @@ void loax_client_delete(loax_client_t** _self)
 	loax_client_t* self = *_self;
 	if(self)
 	{
-		LOGD("debug\n");
+		LOGD("debug");
 		free(self->get_string);
 		loax_listener_delete(&self->listener);
 		net_socket_close(&self->socket_render);
@@ -109,7 +109,7 @@ int loax_client_size(loax_client_t* self, int* w, int* h)
 	assert(self);
 	assert(w);
 	assert(h);
-	LOGD("debug\n");
+	LOGD("debug");
 
 	int cmd   = LOAX_Size;
 	int recvd = 0;
@@ -123,7 +123,7 @@ int loax_client_size(loax_client_t* self, int* w, int* h)
 int loax_client_swapbuffers(loax_client_t* self)
 {
 	assert(self);
-	LOGD("debug\n");
+	LOGD("debug");
 
 	int cmd   = LOAX_SwapBuffers;
 	int ret   = 0;

@@ -206,7 +206,7 @@ static loax_function_cb loax_function_map[] =
 
 loax_server_t* loax_server_new(void)
 {
-	LOGD("debug\n");
+	LOGD("debug");
 
 	loax_server_t* self = (loax_server_t*) malloc(sizeof(loax_server_t));
 	if(self == NULL)

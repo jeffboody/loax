@@ -25,12 +25,14 @@
 #define loax_event_H
 
 // type
-#define LOAX_EVENT_KEYDOWN   0
-#define LOAX_EVENT_KEYUP     1
-#define LOAX_EVENT_RESIZE    2
-#define LOAX_EVENT_TOUCHDOWN 3
-#define LOAX_EVENT_TOUCHUP   4
-#define LOAX_EVENT_TOUCHMOVE 5
+#define LOAX_EVENT_KEYDOWN    0
+#define LOAX_EVENT_KEYUP      1
+#define LOAX_EVENT_BUTTONDOWN 2
+#define LOAX_EVENT_BUTTONUP   3
+#define LOAX_EVENT_RESIZE     4
+#define LOAX_EVENT_TOUCHDOWN  5
+#define LOAX_EVENT_TOUCHUP    6
+#define LOAX_EVENT_TOUCHMOVE  7
 
 // meta key mask
 #define LOAX_KEY_ALT     0x00000032
@@ -52,6 +54,11 @@ typedef struct
 	int keycode;
 	int meta;
 } loax_eventkey_t;
+
+typedef struct
+{
+	int keycode;
+} loax_eventbutton_t;
 
 typedef struct
 {
@@ -77,6 +84,7 @@ typedef struct
 	union
 	{
 		loax_eventkey_t    event_key;
+		loax_eventbutton_t event_button;
 		loax_eventresize_t event_resize;
 		loax_eventtouch_t  event_touch;
 	};

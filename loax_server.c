@@ -318,6 +318,42 @@ void loax_server_keyup(loax_server_t* self, int keycode, int meta)
 	net_socket_sendall(self->socket_event, (const void*) &e, size);
 }
 
+void loax_server_buttondown(loax_server_t* self, int keycode)
+{
+	assert(self);
+	LOGD("debug keycode=0x%X", keycode);
+
+	loax_event_t e =
+	{
+		.type         = LOAX_EVENT_BUTTONDOWN,
+		.event_button =
+		{
+			.keycode = keycode,
+		}
+	};
+
+	int size = sizeof(int) + sizeof(loax_eventbutton_t);
+	net_socket_sendall(self->socket_event, (const void*) &e, size);
+}
+
+void loax_server_buttonup(loax_server_t* self, int keycode)
+{
+	assert(self);
+	LOGD("debug keycode=0x%X", keycode);
+
+	loax_event_t e =
+	{
+		.type         = LOAX_EVENT_BUTTONUP,
+		.event_button =
+		{
+			.keycode = keycode,
+		}
+	};
+
+	int size = sizeof(int) + sizeof(loax_eventbutton_t);
+	net_socket_sendall(self->socket_event, (const void*) &e, size);
+}
+
 void loax_server_touch(loax_server_t* self, int action, int count, float* coord)
 {
 	assert(self);

@@ -57,10 +57,14 @@ int main(int argc, char** argv)
 			}
 			else if(e.type == LOAX_EVENT_KEYUP)
 			{
-				LOGI("keycode=0x%X, meta=0x%X, key=%c",
+				LOGI("KEY: keycode=0x%X, meta=0x%X, key=%c",
 				     e.event_key.keycode,
 				     e.event_key.meta,
 				     (char) e.event_key.keycode);
+			}
+			else if(e.type == LOAX_EVENT_BUTTONUP)
+			{
+				LOGI("BUTTON: keycode=0x%X", e.event_button.keycode);
 			}
 		}
 

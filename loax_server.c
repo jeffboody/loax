@@ -318,10 +318,10 @@ void loax_server_keyup(loax_server_t* self, int keycode, int meta)
 	net_socket_sendall(self->socket_event, (const void*) &e, size);
 }
 
-void loax_server_buttondown(loax_server_t* self, int keycode)
+void loax_server_buttondown(loax_server_t* self, int id, int keycode)
 {
 	assert(self);
-	LOGD("debug keycode=0x%X", keycode);
+	LOGD("debug id=%i, keycode=0x%X", id, keycode);
 
 	loax_event_t e =
 	{
@@ -329,6 +329,7 @@ void loax_server_buttondown(loax_server_t* self, int keycode)
 		.event_button =
 		{
 			.keycode = keycode,
+			.id      = id,
 		}
 	};
 
@@ -336,10 +337,10 @@ void loax_server_buttondown(loax_server_t* self, int keycode)
 	net_socket_sendall(self->socket_event, (const void*) &e, size);
 }
 
-void loax_server_buttonup(loax_server_t* self, int keycode)
+void loax_server_buttonup(loax_server_t* self, int id, int keycode)
 {
 	assert(self);
-	LOGD("debug keycode=0x%X", keycode);
+	LOGD("debug id=%i, keycode=0x%X", id, keycode);
 
 	loax_event_t e =
 	{
@@ -347,6 +348,7 @@ void loax_server_buttonup(loax_server_t* self, int keycode)
 		.event_button =
 		{
 			.keycode = keycode,
+			.id      = id,
 		}
 	};
 

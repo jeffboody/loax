@@ -39,8 +39,8 @@ void           loax_server_delete(loax_server_t** _self);
 void           loax_server_resize(loax_server_t* self, int w, int h);
 void           loax_server_keydown(loax_server_t* self, int keycode, int meta);
 void           loax_server_keyup(loax_server_t* self, int keycode, int meta);
-void           loax_server_buttondown(loax_server_t* self, int keycode);
-void           loax_server_buttonup(loax_server_t* self, int keycode);
+void           loax_server_buttondown(loax_server_t* self, int id, int keycode);
+void           loax_server_buttonup(loax_server_t* self, int id, int keycode);
 void           loax_server_touch(loax_server_t* self, int action, int count,
                                  float* coord);
 // TODO return value?

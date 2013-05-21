@@ -64,7 +64,7 @@ int main(int argc, char** argv)
 			}
 			else if(e.type == LOAX_EVENT_BUTTONUP)
 			{
-				LOGI("BUTTON: keycode=0x%X", e.event_button.keycode);
+				LOGI("BUTTON: id=%i, keycode=0x%X", e.event_button.id, e.event_button.keycode);
 			}
 		}
 

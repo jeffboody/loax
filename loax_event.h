@@ -58,6 +58,7 @@ typedef struct
 typedef struct
 {
 	int keycode;
+	int id;
 } loax_eventbutton_t;
 
 typedef struct

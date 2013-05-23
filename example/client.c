@@ -64,7 +64,9 @@ int main(int argc, char** argv)
 			}
 			else if(e.type == LOAX_EVENT_BUTTONUP)
 			{
-				LOGI("BUTTON: id=%i, keycode=0x%X", e.event_button.id, e.event_button.keycode);
+				const char* keystring = loax_eventbutton_keystring(&e.event_button);
+				LOGI("BUTTON: id=%i, keycode=0x%X, keystring=%s",
+				     e.event_button.id, e.event_button.keycode, keystring);
 			}
 		}
 

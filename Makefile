@@ -1,5 +1,5 @@
 TARGET   = libloax.a
-LOAX     = loax_client loax_client_gl2 loax_log loax_serialize loax_listener
+LOAX     = loax_client loax_client_gl2 loax_log loax_serialize loax_listener loax_event
 SOURCE   = $(LOAX:%=%.c)
 OBJECTS  = $(SOURCE:.c=.o)
 HFILES   = $(LOAX:%=%.h)

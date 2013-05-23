@@ -46,6 +46,44 @@
 #define LOAX_KEY_SHIFT_R 0x00000080
 #define LOAX_KEY_CAPS    0x00100000
 
+// button ids
+#define LOAX_BUTTON_1      0xbc
+#define LOAX_BUTTON_2      0xbd
+#define LOAX_BUTTON_3      0xbe
+#define LOAX_BUTTON_4      0xbf
+#define LOAX_BUTTON_5      0xc0
+#define LOAX_BUTTON_6      0xc1
+#define LOAX_BUTTON_7      0xc2
+#define LOAX_BUTTON_8      0xc3
+#define LOAX_BUTTON_9      0xc4
+#define LOAX_BUTTON_10     0xc5
+#define LOAX_BUTTON_11     0xc6
+#define LOAX_BUTTON_12     0xc7
+#define LOAX_BUTTON_13     0xc8
+#define LOAX_BUTTON_14     0xc9
+#define LOAX_BUTTON_15     0xca
+#define LOAX_BUTTON_16     0xcb
+#define LOAX_BUTTON_A      0x60
+#define LOAX_BUTTON_B      0x61
+#define LOAX_BUTTON_C      0x62
+#define LOAX_BUTTON_L1     0x66
+#define LOAX_BUTTON_R1     0x67
+#define LOAX_BUTTON_L2     0x68
+#define LOAX_BUTTON_R2     0x69
+#define LOAX_BUTTON_MODE   0x6e
+#define LOAX_BUTTON_SELECT 0x6d
+#define LOAX_BUTTON_START  0x6c
+#define LOAX_BUTTON_THUMBL 0x6a
+#define LOAX_BUTTON_THUMBR 0x6b
+#define LOAX_BUTTON_X      0x63
+#define LOAX_BUTTON_Y      0x64
+#define LOAX_BUTTON_Z      0x65
+#define LOAX_BUTTON_UP     0x13
+#define LOAX_BUTTON_DOWN   0x14
+#define LOAX_BUTTON_LEFT   0x15
+#define LOAX_BUTTON_RIGHT  0x16
+#define LOAX_BUTTON_CENTER 0x17
+
 // max touch events supported
 #define LOAX_EVENT_TOUCHMAX 4
 
@@ -90,5 +128,7 @@ typedef struct
 		loax_eventtouch_t  event_touch;
 	};
 } loax_event_t;
+
+const char* loax_eventbutton_keystring(loax_eventbutton_t* self);
 
 #endif

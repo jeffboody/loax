@@ -21,7 +21,6 @@
  *
  */
 
-#include <stdio.h>
 #include <stdlib.h>
 #include "loax/loax_client.h"
 #include "loax/loax_gl2.h"
@@ -32,30 +31,20 @@
 
 int main(int argc, char** argv)
 {
-	int w;
-	int h;
+	int w = 0;
+	int h = 0;
 	loax_client_t* c = loax_client_new();
 	if(c == NULL)
 	{
 		return EXIT_FAILURE;
 	}
 
-	loax_client_size(c, &w, &h);
-	glViewport(0, 0, w, h);
-
-	int idx = 0;
-	float mode = 1.0f;
-	float color[3] = { 0.0f, 0.0f, 0.0f };
 	do
 	{
 		loax_event_t e;
 		while(loax_client_poll(c, &e))
 		{
-			if(e.type == LOAX_EVENT_RESIZE)
-			{
-				glViewport(0, 0, e.event_resize.w, e.event_resize.h);
-			}
-			else if(e.type == LOAX_EVENT_KEYUP)
+			if(e.type == LOAX_EVENT_KEYUP)
 			{
 				LOGI("KEY: keycode=0x%X, meta=0x%X, key=%c",
 				     e.event_key.keycode,
@@ -76,28 +65,9 @@ int main(int argc, char** argv)
 			}
 		}
 
-		glClearColor(color[0], color[1], color[2], 1.0f);
-
-		// update next color
-		color[idx] += mode * 0.1f;
-		if(color[idx] > 1.0f)
-		{
-			color[idx] = 1.0f;
-			++idx;
-		}
-		else if(color[idx] < 0.0f)
-		{
-			color[idx] = 0.0f;
-			++idx;
-		}
-
-		// check for rollover
-		if(idx == 3)
-		{
-			idx = 0;
-			mode *= -1.0f;
-		}
-
+		loax_client_size(c, &w, &h);
+		glViewport(0, 0, w, h);
+		glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 	} while(loax_client_swapbuffers(c));
 

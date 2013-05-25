@@ -356,6 +356,26 @@ void loax_server_buttonup(loax_server_t* self, int id, int keycode)
 	net_socket_sendall(self->socket_event, (const void*) &e, size);
 }
 
+void loax_server_axismove(loax_server_t* self, int id, int axis, float value)
+{
+	assert(self);
+	LOGD("debug id=%i, axis=0x%X, value=%f", id, axis, value);
+
+	loax_event_t e =
+	{
+		.type       = LOAX_EVENT_AXISMOVE,
+		.event_axis =
+		{
+			.id    = id,
+			.axis  = axis,
+			.value = value,
+		}
+	};
+
+	int size = sizeof(int) + sizeof(loax_eventaxis_t);
+	net_socket_sendall(self->socket_event, (const void*) &e, size);
+}
+
 void loax_server_touch(loax_server_t* self, int action, int count, float* coord)
 {
 	assert(self);

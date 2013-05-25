@@ -65,6 +65,12 @@ static void* loax_listener_thread(void* _self)
 			                         sizeof(loax_eventbutton_t),
 			                         &recvd);
 		}
+		else if(*type == LOAX_EVENT_AXISMOVE)
+		{
+			ok &= net_socket_recvall(self->socket_event, event,
+			                         sizeof(loax_eventaxis_t),
+			                         &recvd);
+		}
 		else if((*type == LOAX_EVENT_TOUCHDOWN) ||
 		        (*type == LOAX_EVENT_TOUCHUP)   ||
 		        (*type == LOAX_EVENT_TOUCHMOVE))

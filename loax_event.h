@@ -29,10 +29,11 @@
 #define LOAX_EVENT_KEYUP      1
 #define LOAX_EVENT_BUTTONDOWN 2
 #define LOAX_EVENT_BUTTONUP   3
-#define LOAX_EVENT_RESIZE     4
-#define LOAX_EVENT_TOUCHDOWN  5
-#define LOAX_EVENT_TOUCHUP    6
-#define LOAX_EVENT_TOUCHMOVE  7
+#define LOAX_EVENT_AXISMOVE   4
+#define LOAX_EVENT_RESIZE     5
+#define LOAX_EVENT_TOUCHDOWN  6
+#define LOAX_EVENT_TOUCHUP    7
+#define LOAX_EVENT_TOUCHMOVE  8
 
 // meta key mask
 #define LOAX_KEY_ALT     0x00000032
@@ -84,6 +85,12 @@
 #define LOAX_BUTTON_RIGHT  0x16
 #define LOAX_BUTTON_CENTER 0x17
 
+// axis ids
+#define LOAX_AXIS_X1 0x00
+#define LOAX_AXIS_Y1 0x01
+#define LOAX_AXIS_X2 0x0b
+#define LOAX_AXIS_Y2 0x0e
+
 // max touch events supported
 #define LOAX_EVENT_TOUCHMAX 4
 
@@ -98,6 +105,13 @@ typedef struct
 	int keycode;
 	int id;
 } loax_eventbutton_t;
+
+typedef struct
+{
+	int   id;
+	int   axis;
+	float value;
+} loax_eventaxis_t;
 
 typedef struct
 {
@@ -124,11 +138,13 @@ typedef struct
 	{
 		loax_eventkey_t    event_key;
 		loax_eventbutton_t event_button;
+		loax_eventaxis_t   event_axis;
 		loax_eventresize_t event_resize;
 		loax_eventtouch_t  event_touch;
 	};
 } loax_event_t;
 
 const char* loax_eventbutton_keystring(loax_eventbutton_t* self);
+const char* loax_eventaxis_axisstring(loax_eventaxis_t* self);
 
 #endif

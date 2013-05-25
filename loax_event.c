@@ -32,6 +32,9 @@
 * private                                                  *
 ***********************************************************/
 
+static const char* LOAX_STRING_UNKNOWN = "UNKNOWN";
+
+// button strings
 static const char* LOAX_BUTTONSTRING_1       = "1";
 static const char* LOAX_BUTTONSTRING_2       = "2";
 static const char* LOAX_BUTTONSTRING_3       = "3";
@@ -68,7 +71,12 @@ static const char* LOAX_BUTTONSTRING_DOWN    = "DOWN";
 static const char* LOAX_BUTTONSTRING_LEFT    = "LEFT";
 static const char* LOAX_BUTTONSTRING_RIGHT   = "RIGHT";
 static const char* LOAX_BUTTONSTRING_CENTER  = "CENTER";
-static const char* LOAX_BUTTONSTRING_UNKNOWN = "UNKNOWN";
+
+// axis strings
+static const char* LOAX_AXISSTRING_X1 = "AX1";
+static const char* LOAX_AXISSTRING_Y1 = "AY1";
+static const char* LOAX_AXISSTRING_X2 = "AX2";
+static const char* LOAX_AXISSTRING_Y2 = "AY2";
 
 /***********************************************************
 * private                                                  *
@@ -116,5 +124,18 @@ const char* loax_eventbutton_keystring(loax_eventbutton_t* self)
 	else if(k == LOAX_BUTTON_LEFT)   return LOAX_BUTTONSTRING_LEFT;
 	else if(k == LOAX_BUTTON_RIGHT)  return LOAX_BUTTONSTRING_RIGHT;
 	else if(k == LOAX_BUTTON_CENTER) return LOAX_BUTTONSTRING_CENTER;
-	else                             return LOAX_BUTTONSTRING_UNKNOWN;
+	else                             return LOAX_STRING_UNKNOWN;
+}
+
+const char* loax_eventaxis_axisstring(loax_eventaxis_t* self)
+{
+	assert(self);
+	LOGD("debug");
+
+	int a = self->axis;
+	if     (a == LOAX_AXIS_X1) return LOAX_AXISSTRING_X1;
+	else if(a == LOAX_AXIS_Y1) return LOAX_AXISSTRING_Y1;
+	else if(a == LOAX_AXIS_X2) return LOAX_AXISSTRING_X2;
+	else if(a == LOAX_AXIS_Y2) return LOAX_AXISSTRING_Y2;
+	else                       return LOAX_STRING_UNKNOWN;
 }

@@ -68,6 +68,12 @@ int main(int argc, char** argv)
 				LOGI("BUTTON: id=%i, keycode=0x%X, keystring=%s",
 				     e.event_button.id, e.event_button.keycode, keystring);
 			}
+			else if(e.type == LOAX_EVENT_AXISMOVE)
+			{
+				const char* axisstring = loax_eventaxis_axisstring(&e.event_axis);
+				LOGI("AXIS: id=%i, axis=%s, value=%f",
+				     e.event_axis.id, axisstring, e.event_axis.value);
+			}
 		}
 
 		glClearColor(color[0], color[1], color[2], 1.0f);

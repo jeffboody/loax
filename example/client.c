@@ -33,45 +33,47 @@ int main(int argc, char** argv)
 {
 	int w = 0;
 	int h = 0;
-	loax_client_t* c = loax_client_new();
-	if(c == NULL)
-	{
-		return EXIT_FAILURE;
-	}
 
-	do
+	while(1)
 	{
-		loax_event_t e;
-		while(loax_client_poll(c, &e))
+		loax_client_t* c = loax_client_new();
+		if(c == NULL)
 		{
-			if(e.type == LOAX_EVENT_KEYUP)
-			{
-				LOGI("KEY: keycode=0x%X, meta=0x%X, key=%c",
-				     e.event_key.keycode,
-				     e.event_key.meta,
-				     (char) e.event_key.keycode);
-			}
-			else if(e.type == LOAX_EVENT_BUTTONUP)
-			{
-				const char* keystring = loax_eventbutton_keystring(&e.event_button);
-				LOGI("BUTTON: id=%i, keycode=0x%X, keystring=%s",
-				     e.event_button.id, e.event_button.keycode, keystring);
-			}
-			else if(e.type == LOAX_EVENT_AXISMOVE)
-			{
-				const char* axisstring = loax_eventaxis_axisstring(&e.event_axis);
-				LOGI("AXIS: id=%i, axis=%s, value=%f",
-				     e.event_axis.id, axisstring, e.event_axis.value);
-			}
+			return EXIT_FAILURE;
 		}
 
-		loax_client_size(c, &w, &h);
-		glViewport(0, 0, w, h);
-		glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
-	} while(loax_client_swapbuffers(c));
+		do
+		{
+			loax_event_t e;
+			while(loax_client_poll(c, &e))
+			{
+				if(e.type == LOAX_EVENT_KEYUP)
+				{
+					LOGI("KEY: keycode=0x%X, meta=0x%X, key=%c",
+					     e.event_key.keycode,
+					     e.event_key.meta,
+					     (char) e.event_key.keycode);
+				}
+				else if(e.type == LOAX_EVENT_BUTTONUP)
+				{
+					const char* keystring = loax_eventbutton_keystring(&e.event_button);
+					LOGI("BUTTON: id=%i, keycode=0x%X, keystring=%s",
+					     e.event_button.id, e.event_button.keycode, keystring);
+				}
+				else if(e.type == LOAX_EVENT_AXISMOVE)
+				{
+					const char* axisstring = loax_eventaxis_axisstring(&e.event_axis);
+					LOGI("AXIS: id=%i, axis=%s, value=%f",
+					     e.event_axis.id, axisstring, e.event_axis.value);
+				}
+			}
 
-	loax_client_delete(&c);
+			loax_client_size(c, &w, &h);
+			glViewport(0, 0, w, h);
+			glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
+			glClear(GL_COLOR_BUFFER_BIT);
+		} while(loax_client_swapbuffers(c));
 
-	return EXIT_SUCCESS;
+		loax_client_delete(&c);
+	}
 }

@@ -448,7 +448,7 @@ GL_APICALL void GL_APIENTRY glDrawElements (GLenum mode, GLsizei count, GLenum t
 		SEND_ENUM(mode);
 		SEND_SIZEI(count);
 		SEND_ENUM(type);
-		SEND_ARRAY_VOID(count*b, indices);
+		SEND_VOIDPTR(indices);
 	}
 	else
 	{

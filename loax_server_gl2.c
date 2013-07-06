@@ -748,27 +748,20 @@ void loaxDrawElements (void)
 	GLenum mode;
 	GLsizei count = 0;
 	GLenum type;
+	GLvoid* indices;
 	recv &= RECV_ENUM(&mode);
 	recv &= RECV_SIZEI(&count);
 	recv &= RECV_ENUM(&type);
-
-	unsigned int b = loax_serialize_bytesDrawElements(type);
-	if(b)
+	recv &= RECV_VOIDPTR(&indices);
+	if(recv)
 	{
-		GLvoid* indices = (GLvoid*) malloc(b);
-		if(indices == NULL)
+		if(indices != NULL)
 		{
-			LOGE("malloc failed");
+			LOGE("VBOs are required");
 			SHUTDOWN();
 			return;
 		}
-
-		recv &= RECV_ARRAY_VOID(b, indices);
-		if(recv)
-		{
-			glDrawElements(mode, count, type, indices);
-		}
-		free(indices);
+		glDrawElements(mode, count, type, indices);
 	}
 }
 
@@ -2928,6 +2921,12 @@ void loaxVertexAttribPointer (void)
 	recv &= RECV_VOIDPTR(&ptr);
 	if(recv)
 	{
+		if(ptr != NULL)
+		{
+			LOGE("VBOs are required");
+			SHUTDOWN();
+			return;
+		}
 		glVertexAttribPointer(indx, size, type, normalized, stride, ptr);
 	}
 }

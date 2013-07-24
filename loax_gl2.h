@@ -168,6 +168,6 @@
 #define LOAX_VertexAttrib4fv                     141
 #define LOAX_VertexAttribPointer                 142
 #define LOAX_Viewport                            143
-#define LOAX_MAX                                 144
+#define LOAX_GL_MAX                              144
 
 #endif

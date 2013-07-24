@@ -1,5 +1,5 @@
 TARGET   = libloax_server.a
-LOAX     = loax_server loax_server_gl2 loax_log
+LOAX     = loax_server loax_server_cmd loax_server_gl2 loax_log
 SOURCE   = $(LOAX:%=%.c)
 OBJECTS  = $(SOURCE:.c=.o)
 HFILES   = $(LOAX:%=%.h)

@@ -25,15 +25,16 @@
 #define loax_event_H
 
 // type
-#define LOAX_EVENT_KEYDOWN    0
-#define LOAX_EVENT_KEYUP      1
-#define LOAX_EVENT_BUTTONDOWN 2
-#define LOAX_EVENT_BUTTONUP   3
-#define LOAX_EVENT_AXISMOVE   4
-#define LOAX_EVENT_RESIZE     5
-#define LOAX_EVENT_TOUCHDOWN  6
-#define LOAX_EVENT_TOUCHUP    7
-#define LOAX_EVENT_TOUCHMOVE  8
+#define LOAX_EVENT_KEYDOWN     0
+#define LOAX_EVENT_KEYUP       1
+#define LOAX_EVENT_BUTTONDOWN  2
+#define LOAX_EVENT_BUTTONUP    3
+#define LOAX_EVENT_AXISMOVE    4
+#define LOAX_EVENT_RESIZE      5
+#define LOAX_EVENT_TOUCHDOWN   6
+#define LOAX_EVENT_TOUCHUP     7
+#define LOAX_EVENT_TOUCHMOVE   8
+#define LOAX_EVENT_ORIENTATION 9
 
 // meta key mask
 #define LOAX_KEY_ALT     0x00000032
@@ -115,6 +116,17 @@ typedef struct
 
 typedef struct
 {
+	float ax;
+	float ay;
+	float az;
+	float mx;
+	float my;
+	float mz;
+	int   rotation;
+} loax_eventorientation_t;
+
+typedef struct
+{
 	int w;
 	int h;
 } loax_eventresize_t;
@@ -136,11 +148,12 @@ typedef struct
 	int type;
 	union
 	{
-		loax_eventkey_t    event_key;
-		loax_eventbutton_t event_button;
-		loax_eventaxis_t   event_axis;
-		loax_eventresize_t event_resize;
-		loax_eventtouch_t  event_touch;
+		loax_eventkey_t         event_key;
+		loax_eventbutton_t      event_button;
+		loax_eventaxis_t        event_axis;
+		loax_eventorientation_t event_orientation;
+		loax_eventresize_t      event_resize;
+		loax_eventtouch_t       event_touch;
 	};
 } loax_event_t;
 

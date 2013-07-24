@@ -21,31 +21,10 @@
  *
  */
 
-#ifndef loax_client_H
-#define loax_client_H
+#ifndef loax_server_cmd_H
+#define loax_server_cmd_H
 
-#include <net/net_socket.h>
-#include "loax/loax_listener.h"
-
-typedef struct
-{
-	// client state
-	net_socket_t*    socket_render;
-	loax_listener_t* listener;
-
-	// TODO - GL state
-	int   errno;
-	char* get_string;
-} loax_client_t;
-
-loax_client_t* loax_client_new(void);
-void           loax_client_delete(loax_client_t** _self);
-int            loax_client_size(loax_client_t* self, int* w, int* h);
-int            loax_client_swapbuffers(loax_client_t* self);
-int            loax_client_poll(loax_client_t* self, loax_event_t* e);
-int            loax_client_cmd(loax_client_t* self, int cmd);
-
-// TODO static seterror
-void           loax_client_seterror(loax_client_t* self, int errno);
+void loaxCmdOrientationEnable (void);
+void loaxCmdOrientationDisable (void);
 
 #endif

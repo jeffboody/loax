@@ -26,8 +26,10 @@
 #include "gl2.h"
 #include "loax_event.h"
 #include "loax_gl2.h"
+#include "loax_cmd.h"
 #include "loax_server.h"
 #include "loax_server_gl2.h"
+#include "loax_server_cmd.h"
 
 #define LOG_TAG "loax"
 #include "loax_log.h"
@@ -44,7 +46,7 @@ loax_server_t* g_server = NULL;
 
 typedef void (*loax_function_cb)(void);
 
-static loax_function_cb loax_function_map[] =
+static loax_function_cb loax_gl_map[] =
 {
 	loaxSwapBuffers,
 	loaxSize,
@@ -192,6 +194,12 @@ static loax_function_cb loax_function_map[] =
 	loaxViewport,
 };
 
+static loax_function_cb loax_cmd_map[] =
+{
+	loaxCmdOrientationEnable,
+	loaxCmdOrientationDisable,
+};
+
 /***********************************************************
 * private - Android conversions                            *
 ***********************************************************/
@@ -204,8 +212,9 @@ static loax_function_cb loax_function_map[] =
 * public                                                   *
 ***********************************************************/
 
-loax_server_t* loax_server_new(void)
+loax_server_t* loax_server_new(loax_server_cmd_fn cmd_fn)
 {
+	assert(cmd_fn);
 	LOGD("debug");
 
 	loax_server_t* self = (loax_server_t*) malloc(sizeof(loax_server_t));
@@ -217,6 +226,9 @@ loax_server_t* loax_server_new(void)
 
 	self->w = 0;
 	self->h = 0;
+
+	// JNI callback(s)
+	self->cmd_fn = cmd_fn;
 
 	self->socket_render = net_socket_connect("localhost", "6120", NET_SOCKET_TCP_NODELAY);
 	if(self->socket_render == NULL)
@@ -434,33 +446,67 @@ void loax_server_touch(loax_server_t* self, int action, int count, float* coord)
 	net_socket_sendall(self->socket_event, (const void*) &e, size);
 }
 
+void loax_server_orientation(loax_server_t* self,
+                             float ax, float ay, float az,
+                             float mx, float my, float mz,
+                             int   rotation)
+{
+	assert(self);
+	LOGD("debug ax=%f, ay=%f, az=%f", ax, ay, az);
+	LOGD("debug mx=%f, my=%f, mz=%f", mx, my, mz);
+	LOGD("debug rotation=%i", rotation);
+
+	loax_event_t e =
+	{
+		.type              = LOAX_EVENT_ORIENTATION,
+		.event_orientation =
+		{
+			.ax       = ax,
+			.ay       = ay,
+			.az       = az,
+			.mx       = mx,
+			.my       = my,
+			.mz       = mz,
+			.rotation = rotation,
+		}
+	};
+
+	int size = sizeof(int) + sizeof(loax_eventorientation_t);
+	net_socket_sendall(self->socket_event, (const void*) &e, size);
+}
+
 int loax_server_draw(loax_server_t* self)
 {
-	int command;
+	int cmd;
 	int recvd;
 
-	while(net_socket_recvall(self->socket_render, (void*) &command, sizeof(int), &recvd) > 0)
+	while(net_socket_recvall(self->socket_render, (void*) &cmd, sizeof(int), &recvd) > 0)
 	{
-		if((command >= 0) && (command < LOAX_MAX))
+		if((cmd >= 0) && (cmd < LOAX_GL_MAX))
 		{
-			loax_function_map[command]();
+			loax_gl_map[cmd]();
+
+			if(cmd == LOAX_SwapBuffers)
+			{
+				int one = 1;
+				net_socket_sendall(self->socket_render, (void*) &one, sizeof(int));
+				return 1;
+			}
+			else if(cmd == LOAX_Size)
+			{
+				net_socket_sendall(self->socket_render, (void*) &self->w, sizeof(int));
+				net_socket_sendall(self->socket_render, (void*) &self->h, sizeof(int));
+			}
+		}
+		else if((cmd >= 0x10000) && (cmd < LOAX_CMD_MAX))
+		{
+			cmd &= 0xFFFF;
+			loax_cmd_map[cmd]();
 		}
 		else
 		{
-			LOGE("invalid command=%i", command);
+			LOGE("invalid cmd=%i", cmd);
 			break;
-		}
-
-		if(command == LOAX_SwapBuffers)
-		{
-			int one = 1;
-			net_socket_sendall(self->socket_render, (void*) &one, sizeof(int));
-			return 1;
-		}
-		else if(command == LOAX_Size)
-		{
-			net_socket_sendall(self->socket_render, (void*) &self->w, sizeof(int));
-			net_socket_sendall(self->socket_render, (void*) &self->h, sizeof(int));
 		}
 	}
 

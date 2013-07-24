@@ -25,6 +25,7 @@
 #include <assert.h>
 #include "loax_client.h"
 #include "loax_gl2.h"
+#include "loax_cmd.h"
 #include "gl2.h"
 
 #define LOG_TAG "loax"
@@ -139,6 +140,19 @@ int loax_client_poll(loax_client_t* self, loax_event_t* e)
 	assert(self);
 	LOGD("debug");
 	return loax_listener_poll(self->listener, e);
+}
+
+int loax_client_cmd(loax_client_t* self, int cmd)
+{
+	assert(self);
+	LOGD("debug cmd=%i", cmd);
+
+	int ret   = 0;
+	int recvd = 0;
+	net_socket_sendall(self->socket_render, (const void*) &cmd, sizeof(int));
+	net_socket_flush(self->socket_render);
+	net_socket_recvall(self->socket_render, (void*) &ret, sizeof(int), &recvd);
+	return ret;
 }
 
 void loax_client_seterror(loax_client_t* self, int errno)

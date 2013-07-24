@@ -26,15 +26,20 @@
 
 #include <net/net_socket.h>
 
+typedef int (*loax_server_cmd_fn)(int cmd);
+
 typedef struct
 {
 	int w;
 	int h;
 	net_socket_t* socket_render;
 	net_socket_t* socket_event;
+
+	// JNI callback(s)
+	loax_server_cmd_fn cmd_fn;
 } loax_server_t;
 
-loax_server_t* loax_server_new(void);
+loax_server_t* loax_server_new(loax_server_cmd_fn cmd_fn);
 void           loax_server_delete(loax_server_t** _self);
 void           loax_server_resize(loax_server_t* self, int w, int h);
 void           loax_server_keydown(loax_server_t* self, int keycode, int meta);
@@ -44,6 +49,11 @@ void           loax_server_buttondown(loax_server_t* self, int id, int keycode);
 void           loax_server_buttonup(loax_server_t* self, int id, int keycode);
 void           loax_server_touch(loax_server_t* self, int action, int count,
                                  float* coord);
+void           loax_server_orientation(loax_server_t* self,
+                                       float ax, float ay, float az,
+                                       float mx, float my, float mz,
+                                       int   rotation);
+
 // TODO return value?
 int            loax_server_draw(loax_server_t* self);
 

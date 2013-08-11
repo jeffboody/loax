@@ -26,7 +26,7 @@
 
 #include <net/net_socket.h>
 
-typedef int (*loax_server_cmd_fn)(int cmd);
+typedef void (*loax_server_cmd_fn)(int cmd);
 
 typedef struct
 {

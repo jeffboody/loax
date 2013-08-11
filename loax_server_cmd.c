@@ -103,30 +103,26 @@ void loaxCmdOrientationEnable (void)
 {
 	LOGD("debug");
 
-	int ret = CALL_CMD(LOAX_CMD_ORIENTATION_ENABLE);
-	SEND_INT(ret);
+	CALL_CMD(LOAX_CMD_ORIENTATION_ENABLE);
 }
 
 void loaxCmdOrientationDisable (void)
 {
 	LOGD("debug");
 
-	int ret = CALL_CMD(LOAX_CMD_ORIENTATION_DISABLE);
-	SEND_INT(ret);
+	CALL_CMD(LOAX_CMD_ORIENTATION_DISABLE);
 }
 
 void loaxCmdGpsEnable (void)
 {
 	LOGD("debug");
 
-	int ret = CALL_CMD(LOAX_CMD_GPS_ENABLE);
-	SEND_INT(ret);
+	CALL_CMD(LOAX_CMD_GPS_ENABLE);
 }
 
 void loaxCmdGpsDisable (void)
 {
 	LOGD("debug");
 
-	int ret = CALL_CMD(LOAX_CMD_GPS_DISABLE);
-	SEND_INT(ret);
+	CALL_CMD(LOAX_CMD_GPS_DISABLE);
 }

@@ -43,7 +43,7 @@ void           loax_client_delete(loax_client_t** _self);
 int            loax_client_size(loax_client_t* self, int* w, int* h);
 int            loax_client_swapbuffers(loax_client_t* self);
 int            loax_client_poll(loax_client_t* self, loax_event_t* e);
-int            loax_client_cmd(loax_client_t* self, int cmd);
+void           loax_client_cmd(loax_client_t* self, int cmd);
 
 // TODO static seterror
 void           loax_client_seterror(loax_client_t* self, int errno);

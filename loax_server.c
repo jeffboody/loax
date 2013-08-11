@@ -198,6 +198,8 @@ static loax_function_cb loax_cmd_map[] =
 {
 	loaxCmdOrientationEnable,
 	loaxCmdOrientationDisable,
+	loaxCmdGpsEnable,
+	loaxCmdGpsDisable,
 };
 
 /***********************************************************
@@ -472,6 +474,34 @@ void loax_server_orientation(loax_server_t* self,
 	};
 
 	int size = sizeof(int) + sizeof(loax_eventorientation_t);
+	net_socket_sendall(self->socket_event, (const void*) &e, size);
+}
+
+void loax_server_gps(loax_server_t* self,
+                     double lat, double lon,
+                     float accuracy, float altitude,
+                     float speed, float bearing)
+{
+	assert(self);
+	LOGD("debug lat=%lf, lon=%lf", lat, lon);
+	LOGD("debug accuracy=%f, altitude=%f, speed=%f, bearing=%f",
+	     accuracy, altitude, speed, bearing);
+
+	loax_event_t e =
+	{
+		.type      = LOAX_EVENT_GPS,
+		.event_gps =
+		{
+			.lat      = lat,
+			.lon      = lon,
+			.accuracy = accuracy,
+			.altitude = altitude,
+			.speed    = speed,
+			.bearing  = bearing,
+		}
+	};
+
+	int size = sizeof(int) + sizeof(loax_eventgps_t);
 	net_socket_sendall(self->socket_event, (const void*) &e, size);
 }
 

@@ -26,5 +26,7 @@
 
 void loaxCmdOrientationEnable (void);
 void loaxCmdOrientationDisable (void);
+void loaxCmdGpsEnable (void);
+void loaxCmdGpsDisable (void);
 
 #endif

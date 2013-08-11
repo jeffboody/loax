@@ -26,6 +26,8 @@
 
 #define LOAX_CMD_ORIENTATION_ENABLE  0x00010000
 #define LOAX_CMD_ORIENTATION_DISABLE 0x00010001
-#define LOAX_CMD_MAX                 0x00010002
+#define LOAX_CMD_GPS_ENABLE          0x00010002
+#define LOAX_CMD_GPS_DISABLE         0x00010003
+#define LOAX_CMD_MAX                 0x00010004
 
 #endif

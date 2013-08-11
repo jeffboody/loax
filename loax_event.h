@@ -35,6 +35,7 @@
 #define LOAX_EVENT_TOUCHUP     7
 #define LOAX_EVENT_TOUCHMOVE   8
 #define LOAX_EVENT_ORIENTATION 9
+#define LOAX_EVENT_GPS         10
 
 // meta key mask
 #define LOAX_KEY_ALT     0x00000032
@@ -127,6 +128,16 @@ typedef struct
 
 typedef struct
 {
+	double lat;
+	double lon;
+	float  accuracy;
+	float  altitude;
+	float  speed;
+	float  bearing;
+} loax_eventgps_t;
+
+typedef struct
+{
 	int w;
 	int h;
 } loax_eventresize_t;
@@ -152,6 +163,7 @@ typedef struct
 		loax_eventbutton_t      event_button;
 		loax_eventaxis_t        event_axis;
 		loax_eventorientation_t event_orientation;
+		loax_eventgps_t         event_gps;
 		loax_eventresize_t      event_resize;
 		loax_eventtouch_t       event_touch;
 	};

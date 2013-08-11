@@ -41,47 +41,78 @@ static void* loax_listener_thread(void* _self)
 	int   recvd = 0;
 	int   ok    = 1;
 	int*  type  = &self->event_buffer[self->event_tail].type;
-	void* event = (void*) &self->event_buffer[self->event_tail].event_key;
 	while(net_socket_recvall(self->socket_event, (void*) type,
 	                         sizeof(int), &recvd))
 	{
 		if(*type == LOAX_EVENT_RESIZE)
 		{
-			ok &= net_socket_recvall(self->socket_event, event,
-			                         sizeof(loax_eventresize_t),
-			                         &recvd);
+			loax_eventresize_t* e = &self->event_buffer[self->event_tail].event_resize;
+			ok &= net_socket_recvall(self->socket_event, (void*) &e->w,
+			                         sizeof(int), &recvd);
+			ok &= net_socket_recvall(self->socket_event, (void*) &e->h,
+			                         sizeof(int), &recvd);
 		}
 		else if((*type == LOAX_EVENT_KEYDOWN) ||
 		        (*type == LOAX_EVENT_KEYUP))
 		{
-			ok &= net_socket_recvall(self->socket_event, event,
-			                         sizeof(loax_eventkey_t),
-			                         &recvd);
+			loax_eventkey_t* e = &self->event_buffer[self->event_tail].event_key;
+			ok &= net_socket_recvall(self->socket_event, (void*) &e->keycode,
+			                         sizeof(int), &recvd);
+			ok &= net_socket_recvall(self->socket_event, (void*) &e->meta,
+			                         sizeof(int), &recvd);
 		}
 		else if((*type == LOAX_EVENT_BUTTONDOWN) ||
 		        (*type == LOAX_EVENT_BUTTONUP))
 		{
-			ok &= net_socket_recvall(self->socket_event, event,
-			                         sizeof(loax_eventbutton_t),
-			                         &recvd);
+			loax_eventbutton_t* e = &self->event_buffer[self->event_tail].event_button;
+			ok &= net_socket_recvall(self->socket_event, (void*) &e->keycode,
+			                         sizeof(int), &recvd);
+			ok &= net_socket_recvall(self->socket_event, (void*) &e->id,
+			                         sizeof(int), &recvd);
 		}
 		else if(*type == LOAX_EVENT_AXISMOVE)
 		{
-			ok &= net_socket_recvall(self->socket_event, event,
-			                         sizeof(loax_eventaxis_t),
-			                         &recvd);
+			loax_eventaxis_t* e = &self->event_buffer[self->event_tail].event_axis;
+			ok &= net_socket_recvall(self->socket_event, (void*) &e->id,
+			                         sizeof(int), &recvd);
+			ok &= net_socket_recvall(self->socket_event, (void*) &e->axis,
+			                         sizeof(int), &recvd);
+			ok &= net_socket_recvall(self->socket_event, (void*) &e->value,
+			                         sizeof(float), &recvd);
 		}
 		else if(*type == LOAX_EVENT_ORIENTATION)
 		{
-			ok &= net_socket_recvall(self->socket_event, event,
-			                         sizeof(loax_eventorientation_t),
-			                         &recvd);
+			loax_eventorientation_t* e = &self->event_buffer[self->event_tail].event_orientation;
+			ok &= net_socket_recvall(self->socket_event, (void*) &e->ax,
+			                         sizeof(float), &recvd);
+			ok &= net_socket_recvall(self->socket_event, (void*) &e->ay,
+			                         sizeof(float), &recvd);
+			ok &= net_socket_recvall(self->socket_event, (void*) &e->az,
+			                         sizeof(float), &recvd);
+			ok &= net_socket_recvall(self->socket_event, (void*) &e->mx,
+			                         sizeof(float), &recvd);
+			ok &= net_socket_recvall(self->socket_event, (void*) &e->my,
+			                         sizeof(float), &recvd);
+			ok &= net_socket_recvall(self->socket_event, (void*) &e->mz,
+			                         sizeof(float), &recvd);
+			ok &= net_socket_recvall(self->socket_event, (void*) &e->rotation,
+			                         sizeof(int), &recvd);
 		}
 		else if(*type == LOAX_EVENT_GPS)
 		{
-			ok &= net_socket_recvall(self->socket_event, event,
-			                         sizeof(loax_eventgps_t),
-			                         &recvd);
+			loax_eventgps_t* e = &self->event_buffer[self->event_tail].event_gps;
+			ok &= net_socket_recvall(self->socket_event, (void*) &e->lat,
+			                         sizeof(double), &recvd);
+			ok &= net_socket_recvall(self->socket_event, (void*) &e->lon,
+			                         sizeof(double), &recvd);
+			ok &= net_socket_recvall(self->socket_event, (void*) &e->accuracy,
+			                         sizeof(float), &recvd);
+			ok &= net_socket_recvall(self->socket_event, (void*) &e->altitude,
+			                         sizeof(float), &recvd);
+			ok &= net_socket_recvall(self->socket_event, (void*) &e->speed,
+			                         sizeof(float), &recvd);
+			ok &= net_socket_recvall(self->socket_event, (void*) &e->bearing,
+			                         sizeof(float), &recvd);
 		}
 		else if((*type == LOAX_EVENT_TOUCHDOWN) ||
 		        (*type == LOAX_EVENT_TOUCHUP)   ||
@@ -100,10 +131,16 @@ static void* loax_listener_thread(void* _self)
 				break;
 			}
 			self->event_buffer[self->event_tail].event_touch.count = count;
-			event = (void*) self->event_buffer[self->event_tail].event_touch.coord;
-			ok &= net_socket_recvall(self->socket_event, event,
-			                         count*sizeof(loax_eventcoord_t),
-			                         &recvd);
+
+			int i;
+			for(i = 0; i < count; ++i)
+			{
+				loax_eventcoord_t* e = &self->event_buffer[self->event_tail].event_touch.coord[i];
+				ok &= net_socket_recvall(self->socket_event, (void*) &e->x,
+				                         sizeof(float), &recvd);
+				ok &= net_socket_recvall(self->socket_event, (void*) &e->y,
+				                         sizeof(float), &recvd);
+			}
 		}
 		else
 		{
@@ -121,7 +158,6 @@ static void* loax_listener_thread(void* _self)
 
 		self->event_tail = (self->event_tail + 1) % LOAX_LISTENER_BUFSIZE;
 		type  = &self->event_buffer[self->event_tail].type;
-		event = (void*) &self->event_buffer[self->event_tail].event_key;
 
 		if(self->thread_cancel == 1)
 		{

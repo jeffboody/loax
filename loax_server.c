@@ -238,7 +238,7 @@ loax_server_t* loax_server_new(loax_server_cmd_fn cmd_fn)
 		goto fail_render;
 	}
 
-	self->socket_event = net_socket_connect("localhost", "6121", NET_SOCKET_TCP_NODELAY);
+	self->socket_event = net_socket_connect("localhost", "6121", NET_SOCKET_TCP_BUFFERED);
 	if(self->socket_event == NULL)
 	{
 		goto fail_event;
@@ -280,18 +280,11 @@ void loax_server_resize(loax_server_t* self, int w, int h)
 	self->w = w;
 	self->h = h;
 
-	loax_event_t e =
-	{
-		.type         = LOAX_EVENT_RESIZE,
-		.event_resize =
-		{
-			.w = w,
-			.h = h,
-		}
-	};
-
-	int size = sizeof(int) + sizeof(loax_eventresize_t);
-	net_socket_sendall(self->socket_event, (const void*) &e, size);
+	int type = LOAX_EVENT_RESIZE;
+	net_socket_sendall(self->socket_event, (const void*) &type, sizeof(int));
+	net_socket_sendall(self->socket_event, (const void*) &w, sizeof(int));
+	net_socket_sendall(self->socket_event, (const void*) &h, sizeof(int));
+	net_socket_flush(self->socket_event);
 }
 
 void loax_server_keydown(loax_server_t* self, int keycode, int meta)
@@ -299,18 +292,11 @@ void loax_server_keydown(loax_server_t* self, int keycode, int meta)
 	assert(self);
 	LOGD("debug keycode=0x%X, meta=0x%X", keycode, meta);
 
-	loax_event_t e =
-	{
-		.type      = LOAX_EVENT_KEYDOWN,
-		.event_key =
-		{
-			.keycode = keycode,
-			.meta    = meta,
-		}
-	};
-
-	int size = sizeof(int) + sizeof(loax_eventkey_t);
-	net_socket_sendall(self->socket_event, (const void*) &e, size);
+	int type = LOAX_EVENT_KEYDOWN;
+	net_socket_sendall(self->socket_event, (const void*) &type, sizeof(int));
+	net_socket_sendall(self->socket_event, (const void*) &keycode, sizeof(int));
+	net_socket_sendall(self->socket_event, (const void*) &meta, sizeof(int));
+	net_socket_flush(self->socket_event);
 }
 
 void loax_server_keyup(loax_server_t* self, int keycode, int meta)
@@ -318,18 +304,11 @@ void loax_server_keyup(loax_server_t* self, int keycode, int meta)
 	assert(self);
 	LOGD("debug keycode=0x%X, meta=0x%X", keycode, meta);
 
-	loax_event_t e =
-	{
-		.type      = LOAX_EVENT_KEYUP,
-		.event_key =
-		{
-			.keycode = keycode,
-			.meta    = meta,
-		}
-	};
-
-	int size = sizeof(int) + sizeof(loax_eventkey_t);
-	net_socket_sendall(self->socket_event, (const void*) &e, size);
+	int type = LOAX_EVENT_KEYUP;
+	net_socket_sendall(self->socket_event, (const void*) &type, sizeof(int));
+	net_socket_sendall(self->socket_event, (const void*) &keycode, sizeof(int));
+	net_socket_sendall(self->socket_event, (const void*) &meta, sizeof(int));
+	net_socket_flush(self->socket_event);
 }
 
 void loax_server_buttondown(loax_server_t* self, int id, int keycode)
@@ -337,18 +316,11 @@ void loax_server_buttondown(loax_server_t* self, int id, int keycode)
 	assert(self);
 	LOGD("debug id=%i, keycode=0x%X", id, keycode);
 
-	loax_event_t e =
-	{
-		.type         = LOAX_EVENT_BUTTONDOWN,
-		.event_button =
-		{
-			.keycode = keycode,
-			.id      = id,
-		}
-	};
-
-	int size = sizeof(int) + sizeof(loax_eventbutton_t);
-	net_socket_sendall(self->socket_event, (const void*) &e, size);
+	int type = LOAX_EVENT_BUTTONDOWN;
+	net_socket_sendall(self->socket_event, (const void*) &type, sizeof(int));
+	net_socket_sendall(self->socket_event, (const void*) &keycode, sizeof(int));
+	net_socket_sendall(self->socket_event, (const void*) &id, sizeof(int));
+	net_socket_flush(self->socket_event);
 }
 
 void loax_server_buttonup(loax_server_t* self, int id, int keycode)
@@ -356,18 +328,11 @@ void loax_server_buttonup(loax_server_t* self, int id, int keycode)
 	assert(self);
 	LOGD("debug id=%i, keycode=0x%X", id, keycode);
 
-	loax_event_t e =
-	{
-		.type         = LOAX_EVENT_BUTTONUP,
-		.event_button =
-		{
-			.keycode = keycode,
-			.id      = id,
-		}
-	};
-
-	int size = sizeof(int) + sizeof(loax_eventbutton_t);
-	net_socket_sendall(self->socket_event, (const void*) &e, size);
+	int type = LOAX_EVENT_BUTTONUP;
+	net_socket_sendall(self->socket_event, (const void*) &type, sizeof(int));
+	net_socket_sendall(self->socket_event, (const void*) &keycode, sizeof(int));
+	net_socket_sendall(self->socket_event, (const void*) &id, sizeof(int));
+	net_socket_flush(self->socket_event);
 }
 
 void loax_server_axismove(loax_server_t* self, int id, int axis, float value)
@@ -375,19 +340,12 @@ void loax_server_axismove(loax_server_t* self, int id, int axis, float value)
 	assert(self);
 	LOGD("debug id=%i, axis=0x%X, value=%f", id, axis, value);
 
-	loax_event_t e =
-	{
-		.type       = LOAX_EVENT_AXISMOVE,
-		.event_axis =
-		{
-			.id    = id,
-			.axis  = axis,
-			.value = value,
-		}
-	};
-
-	int size = sizeof(int) + sizeof(loax_eventaxis_t);
-	net_socket_sendall(self->socket_event, (const void*) &e, size);
+	int type = LOAX_EVENT_AXISMOVE;
+	net_socket_sendall(self->socket_event, (const void*) &type, sizeof(int));
+	net_socket_sendall(self->socket_event, (const void*) &id, sizeof(int));
+	net_socket_sendall(self->socket_event, (const void*) &axis, sizeof(int));
+	net_socket_sendall(self->socket_event, (const void*) &value, sizeof(float));
+	net_socket_flush(self->socket_event);
 }
 
 void loax_server_touch(loax_server_t* self, int action, int count, float* coord)
@@ -428,24 +386,16 @@ void loax_server_touch(loax_server_t* self, int action, int count, float* coord)
 		count = LOAX_EVENT_TOUCHMAX;
 	}
 
-	loax_event_t e =
-	{
-		.type = type,
-		.event_touch =
-		{
-			.count = count,
-		}
-	};
+	net_socket_sendall(self->socket_event, (const void*) &type, sizeof(int));
+	net_socket_sendall(self->socket_event, (const void*) &count, sizeof(int));
 
 	int i;
 	for(i = 0; i < count; ++i)
 	{
-		e.event_touch.coord[i].x = coord[2*i];
-		e.event_touch.coord[i].y = coord[2*i + 1];
+		net_socket_sendall(self->socket_event, (const void*) &coord[2*i], sizeof(float));
+		net_socket_sendall(self->socket_event, (const void*) &coord[2*i + 1], sizeof(float));
 	}
-
-	int size = 2*sizeof(int) + count*sizeof(loax_eventcoord_t);
-	net_socket_sendall(self->socket_event, (const void*) &e, size);
+	net_socket_flush(self->socket_event);
 }
 
 void loax_server_orientation(loax_server_t* self,
@@ -458,23 +408,16 @@ void loax_server_orientation(loax_server_t* self,
 	LOGD("debug mx=%f, my=%f, mz=%f", mx, my, mz);
 	LOGD("debug rotation=%i", rotation);
 
-	loax_event_t e =
-	{
-		.type              = LOAX_EVENT_ORIENTATION,
-		.event_orientation =
-		{
-			.ax       = ax,
-			.ay       = ay,
-			.az       = az,
-			.mx       = mx,
-			.my       = my,
-			.mz       = mz,
-			.rotation = rotation,
-		}
-	};
-
-	int size = sizeof(int) + sizeof(loax_eventorientation_t);
-	net_socket_sendall(self->socket_event, (const void*) &e, size);
+	int type = LOAX_EVENT_ORIENTATION;
+	net_socket_sendall(self->socket_event, (const void*) &type, sizeof(int));
+	net_socket_sendall(self->socket_event, (const void*) &ax, sizeof(float));
+	net_socket_sendall(self->socket_event, (const void*) &ay, sizeof(float));
+	net_socket_sendall(self->socket_event, (const void*) &az, sizeof(float));
+	net_socket_sendall(self->socket_event, (const void*) &mx, sizeof(float));
+	net_socket_sendall(self->socket_event, (const void*) &my, sizeof(float));
+	net_socket_sendall(self->socket_event, (const void*) &mz, sizeof(float));
+	net_socket_sendall(self->socket_event, (const void*) &rotation, sizeof(int));
+	net_socket_flush(self->socket_event);
 }
 
 void loax_server_gps(loax_server_t* self,
@@ -487,22 +430,15 @@ void loax_server_gps(loax_server_t* self,
 	LOGD("debug accuracy=%f, altitude=%f, speed=%f, bearing=%f",
 	     accuracy, altitude, speed, bearing);
 
-	loax_event_t e =
-	{
-		.type      = LOAX_EVENT_GPS,
-		.event_gps =
-		{
-			.lat      = lat,
-			.lon      = lon,
-			.accuracy = accuracy,
-			.altitude = altitude,
-			.speed    = speed,
-			.bearing  = bearing,
-		}
-	};
-
-	int size = sizeof(int) + sizeof(loax_eventgps_t);
-	net_socket_sendall(self->socket_event, (const void*) &e, size);
+	int type = LOAX_EVENT_GPS;
+	net_socket_sendall(self->socket_event, (const void*) &type, sizeof(int));
+	net_socket_sendall(self->socket_event, (const void*) &lat, sizeof(double));
+	net_socket_sendall(self->socket_event, (const void*) &lon, sizeof(double));
+	net_socket_sendall(self->socket_event, (const void*) &accuracy, sizeof(float));
+	net_socket_sendall(self->socket_event, (const void*) &altitude, sizeof(float));
+	net_socket_sendall(self->socket_event, (const void*) &speed, sizeof(float));
+	net_socket_sendall(self->socket_event, (const void*) &bearing, sizeof(float));
+	net_socket_flush(self->socket_event);
 }
 
 int loax_server_draw(loax_server_t* self)

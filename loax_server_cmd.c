@@ -99,18 +99,32 @@ extern loax_server_t* g_server;
 * public CMD API                                           *
 ***********************************************************/
 
-void loaxCmdOrientationEnable (void)
+void loaxCmdAccelerometerEnable (void)
 {
 	LOGD("debug");
 
-	CALL_CMD(LOAX_CMD_ORIENTATION_ENABLE);
+	CALL_CMD(LOAX_CMD_ACCELEROMETER_ENABLE);
 }
 
-void loaxCmdOrientationDisable (void)
+void loaxCmdAccelerometerDisable (void)
 {
 	LOGD("debug");
 
-	CALL_CMD(LOAX_CMD_ORIENTATION_DISABLE);
+	CALL_CMD(LOAX_CMD_ACCELEROMETER_DISABLE);
+}
+
+void loaxCmdMagnetometerEnable (void)
+{
+	LOGD("debug");
+
+	CALL_CMD(LOAX_CMD_MAGNETOMETER_ENABLE);
+}
+
+void loaxCmdMagnetometerDisable (void)
+{
+	LOGD("debug");
+
+	CALL_CMD(LOAX_CMD_MAGNETOMETER_DISABLE);
 }
 
 void loaxCmdGpsEnable (void)

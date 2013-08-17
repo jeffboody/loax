@@ -24,8 +24,10 @@
 #ifndef loax_server_cmd_H
 #define loax_server_cmd_H
 
-void loaxCmdOrientationEnable (void);
-void loaxCmdOrientationDisable (void);
+void loaxCmdAccelerometerEnable (void);
+void loaxCmdAccelerometerDisable (void);
+void loaxCmdMagnetometerEnable (void);
+void loaxCmdMagnetometerDisable (void);
 void loaxCmdGpsEnable (void);
 void loaxCmdGpsDisable (void);
 

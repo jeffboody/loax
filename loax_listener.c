@@ -80,23 +80,31 @@ static void* loax_listener_thread(void* _self)
 			ok &= net_socket_recvall(self->socket_event, (void*) &e->value,
 			                         sizeof(float), &recvd);
 		}
-		else if(*type == LOAX_EVENT_ORIENTATION)
+		else if(*type == LOAX_EVENT_ACCELEROMETER)
 		{
-			loax_eventorientation_t* e = &self->event_buffer[self->event_tail].event_orientation;
+			loax_eventaccelerometer_t* e = &self->event_buffer[self->event_tail].event_accelerometer;
+			ok &= net_socket_recvall(self->socket_event, (void*) &e->utime,
+			                         sizeof(double), &recvd);
 			ok &= net_socket_recvall(self->socket_event, (void*) &e->ax,
 			                         sizeof(float), &recvd);
 			ok &= net_socket_recvall(self->socket_event, (void*) &e->ay,
 			                         sizeof(float), &recvd);
 			ok &= net_socket_recvall(self->socket_event, (void*) &e->az,
 			                         sizeof(float), &recvd);
+			ok &= net_socket_recvall(self->socket_event, (void*) &e->rotation,
+			                         sizeof(int), &recvd);
+		}
+		else if(*type == LOAX_EVENT_MAGNETOMETER)
+		{
+			loax_eventmagnetometer_t* e = &self->event_buffer[self->event_tail].event_magnetometer;
+			ok &= net_socket_recvall(self->socket_event, (void*) &e->utime,
+			                         sizeof(double), &recvd);
 			ok &= net_socket_recvall(self->socket_event, (void*) &e->mx,
 			                         sizeof(float), &recvd);
 			ok &= net_socket_recvall(self->socket_event, (void*) &e->my,
 			                         sizeof(float), &recvd);
 			ok &= net_socket_recvall(self->socket_event, (void*) &e->mz,
 			                         sizeof(float), &recvd);
-			ok &= net_socket_recvall(self->socket_event, (void*) &e->rotation,
-			                         sizeof(int), &recvd);
 		}
 		else if(*type == LOAX_EVENT_GPS)
 		{

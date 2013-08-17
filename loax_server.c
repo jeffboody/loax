@@ -23,6 +23,7 @@
 
 #include <stdlib.h>
 #include <assert.h>
+#include <a3d/a3d_time.h>
 #include "gl2.h"
 #include "loax_event.h"
 #include "loax_gl2.h"
@@ -196,8 +197,10 @@ static loax_function_cb loax_gl_map[] =
 
 static loax_function_cb loax_cmd_map[] =
 {
-	loaxCmdOrientationEnable,
-	loaxCmdOrientationDisable,
+	loaxCmdAccelerometerEnable,
+	loaxCmdAccelerometerDisable,
+	loaxCmdMagnetometerEnable,
+	loaxCmdMagnetometerDisable,
 	loaxCmdGpsEnable,
 	loaxCmdGpsDisable,
 };
@@ -398,25 +401,39 @@ void loax_server_touch(loax_server_t* self, int action, int count, float* coord)
 	net_socket_flush(self->socket_event);
 }
 
-void loax_server_orientation(loax_server_t* self,
-                             float ax, float ay, float az,
-                             float mx, float my, float mz,
-                             int   rotation)
+void loax_server_accelerometer(loax_server_t* self,
+                               float ax, float ay, float az,
+                               int rotation)
+
 {
 	assert(self);
 	LOGD("debug ax=%f, ay=%f, az=%f", ax, ay, az);
-	LOGD("debug mx=%f, my=%f, mz=%f", mx, my, mz);
 	LOGD("debug rotation=%i", rotation);
 
-	int type = LOAX_EVENT_ORIENTATION;
+	int    type  = LOAX_EVENT_ACCELEROMETER;
+	double utime = a3d_utime();
 	net_socket_sendall(self->socket_event, (const void*) &type, sizeof(int));
+	net_socket_sendall(self->socket_event, (const void*) &utime, sizeof(double));
 	net_socket_sendall(self->socket_event, (const void*) &ax, sizeof(float));
 	net_socket_sendall(self->socket_event, (const void*) &ay, sizeof(float));
 	net_socket_sendall(self->socket_event, (const void*) &az, sizeof(float));
+	net_socket_sendall(self->socket_event, (const void*) &rotation, sizeof(int));
+	net_socket_flush(self->socket_event);
+}
+
+void loax_server_magnetometer(loax_server_t* self,
+                              float mx, float my, float mz)
+{
+	assert(self);
+	LOGD("debug mx=%f, my=%f, mz=%f", mx, my, mz);
+
+	int    type  = LOAX_EVENT_MAGNETOMETER;
+	double utime = a3d_utime();
+	net_socket_sendall(self->socket_event, (const void*) &type, sizeof(int));
+	net_socket_sendall(self->socket_event, (const void*) &utime, sizeof(double));
 	net_socket_sendall(self->socket_event, (const void*) &mx, sizeof(float));
 	net_socket_sendall(self->socket_event, (const void*) &my, sizeof(float));
 	net_socket_sendall(self->socket_event, (const void*) &mz, sizeof(float));
-	net_socket_sendall(self->socket_event, (const void*) &rotation, sizeof(int));
 	net_socket_flush(self->socket_event);
 }
 

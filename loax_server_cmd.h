@@ -30,5 +30,7 @@ void loaxCmdMagnetometerEnable (void);
 void loaxCmdMagnetometerDisable (void);
 void loaxCmdGpsEnable (void);
 void loaxCmdGpsDisable (void);
+void loaxCmdGyroscopeEnable (void);
+void loaxCmdGyroscopeDisable (void);
 
 #endif

@@ -203,6 +203,8 @@ static loax_function_cb loax_cmd_map[] =
 	loaxCmdMagnetometerDisable,
 	loaxCmdGpsEnable,
 	loaxCmdGpsDisable,
+	loaxCmdGyroscopeEnable,
+	loaxCmdGyroscopeDisable,
 };
 
 /***********************************************************
@@ -455,6 +457,22 @@ void loax_server_gps(loax_server_t* self,
 	net_socket_sendall(self->socket_event, (const void*) &altitude, sizeof(float));
 	net_socket_sendall(self->socket_event, (const void*) &speed, sizeof(float));
 	net_socket_sendall(self->socket_event, (const void*) &bearing, sizeof(float));
+	net_socket_flush(self->socket_event);
+}
+
+void loax_server_gyroscope(loax_server_t* self,
+                           float ax, float ay, float az)
+{
+	assert(self);
+	LOGD("debug ax=%f, ay=%f, az=%f", ax, ay, az);
+
+	int    type  = LOAX_EVENT_GYROSCOPE;
+	double utime = a3d_utime();
+	net_socket_sendall(self->socket_event, (const void*) &type, sizeof(int));
+	net_socket_sendall(self->socket_event, (const void*) &utime, sizeof(double));
+	net_socket_sendall(self->socket_event, (const void*) &ax, sizeof(float));
+	net_socket_sendall(self->socket_event, (const void*) &ay, sizeof(float));
+	net_socket_sendall(self->socket_event, (const void*) &az, sizeof(float));
 	net_socket_flush(self->socket_event);
 }
 

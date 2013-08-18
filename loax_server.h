@@ -58,6 +58,8 @@ void           loax_server_gps(loax_server_t* self,
                                double lat, double lon,
                                float accuracy, float altitude,
                                float speed, float bearing);
+void           loax_server_gyroscope(loax_server_t* self,
+                                     float ax, float ay, float az);
 
 // TODO return value?
 int            loax_server_draw(loax_server_t* self);

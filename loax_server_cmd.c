@@ -140,3 +140,17 @@ void loaxCmdGpsDisable (void)
 
 	CALL_CMD(LOAX_CMD_GPS_DISABLE);
 }
+
+void loaxCmdGyroscopeEnable (void)
+{
+	LOGD("debug");
+
+	CALL_CMD(LOAX_CMD_GYROSCOPE_ENABLE);
+}
+
+void loaxCmdGyroscopeDisable (void)
+{
+	LOGD("debug");
+
+	CALL_CMD(LOAX_CMD_GYROSCOPE_DISABLE);
+}

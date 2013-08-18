@@ -122,6 +122,18 @@ static void* loax_listener_thread(void* _self)
 			ok &= net_socket_recvall(self->socket_event, (void*) &e->bearing,
 			                         sizeof(float), &recvd);
 		}
+		else if(*type == LOAX_EVENT_GYROSCOPE)
+		{
+			loax_eventgyroscope_t* e = &self->event_buffer[self->event_tail].event_gyroscope;
+			ok &= net_socket_recvall(self->socket_event, (void*) &e->utime,
+			                         sizeof(double), &recvd);
+			ok &= net_socket_recvall(self->socket_event, (void*) &e->ax,
+			                         sizeof(float), &recvd);
+			ok &= net_socket_recvall(self->socket_event, (void*) &e->ay,
+			                         sizeof(float), &recvd);
+			ok &= net_socket_recvall(self->socket_event, (void*) &e->az,
+			                         sizeof(float), &recvd);
+		}
 		else if((*type == LOAX_EVENT_TOUCHDOWN) ||
 		        (*type == LOAX_EVENT_TOUCHUP)   ||
 		        (*type == LOAX_EVENT_TOUCHMOVE))

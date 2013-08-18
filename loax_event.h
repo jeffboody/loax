@@ -37,6 +37,7 @@
 #define LOAX_EVENT_ACCELEROMETER 9
 #define LOAX_EVENT_MAGNETOMETER  10
 #define LOAX_EVENT_GPS           11
+#define LOAX_EVENT_GYROSCOPE     12
 
 // meta key mask
 #define LOAX_KEY_ALT     0x00000032
@@ -145,6 +146,14 @@ typedef struct
 
 typedef struct
 {
+	double utime;
+	float  ax;
+	float  ay;
+	float  az;
+} loax_eventgyroscope_t;
+
+typedef struct
+{
 	int w;
 	int h;
 } loax_eventresize_t;
@@ -172,6 +181,7 @@ typedef struct
 		loax_eventaccelerometer_t event_accelerometer;
 		loax_eventmagnetometer_t  event_magnetometer;
 		loax_eventgps_t           event_gps;
+		loax_eventgyroscope_t     event_gyroscope;
 		loax_eventresize_t        event_resize;
 		loax_eventtouch_t         event_touch;
 	};

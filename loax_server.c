@@ -23,6 +23,7 @@
 
 #include <stdlib.h>
 #include <assert.h>
+#include <unistd.h>
 #include <a3d/a3d_time.h>
 #include "gl2.h"
 #include "loax_event.h"
@@ -243,10 +244,24 @@ loax_server_t* loax_server_new(loax_server_cmd_fn cmd_fn)
 		goto fail_render;
 	}
 
-	self->socket_event = net_socket_connect("localhost", "6121", NET_SOCKET_TCP_BUFFERED);
-	if(self->socket_event == NULL)
+	int retry = 0;
+	while(1)
 	{
-		goto fail_event;
+		self->socket_event = net_socket_connect("localhost", "6121", NET_SOCKET_TCP_BUFFERED);
+		if(self->socket_event)
+		{
+			break;
+		}
+		else if(retry == 3)
+		{
+			LOGE("aborted after retry=%i", retry);
+			goto fail_event;
+		}
+
+		// event socket can fail if server connects too fast
+		++retry;
+		LOGW("retry=%i", retry);
+		usleep(50000*retry);
 	}
 
 	// success

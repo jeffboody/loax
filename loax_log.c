@@ -57,7 +57,7 @@ void loax_log(const char* func, int line, int type, const char* tag, const char*
 		va_end(argptr);
 	}
 	#ifdef ANDROID
-		__android_log_print(type, tag, buf);
+		__android_log_print(type, tag, "%s", buf);
 	#else
 		printf("%s\n", buf);
 	#endif

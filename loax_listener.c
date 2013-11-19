@@ -109,6 +109,8 @@ static void* loax_listener_thread(void* _self)
 		else if(*type == LOAX_EVENT_GPS)
 		{
 			loax_eventgps_t* e = &self->event_buffer[self->event_tail].event_gps;
+			ok &= net_socket_recvall(self->socket_event, (void*) &e->utime,
+			                         sizeof(double), &recvd);
 			ok &= net_socket_recvall(self->socket_event, (void*) &e->lat,
 			                         sizeof(double), &recvd);
 			ok &= net_socket_recvall(self->socket_event, (void*) &e->lon,

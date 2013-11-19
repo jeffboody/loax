@@ -465,7 +465,9 @@ void loax_server_gps(loax_server_t* self,
 	     accuracy, altitude, speed, bearing);
 
 	int type = LOAX_EVENT_GPS;
+	double utime = a3d_utime();
 	net_socket_sendall(self->socket_event, (const void*) &type, sizeof(int));
+	net_socket_sendall(self->socket_event, (const void*) &utime, sizeof(double));
 	net_socket_sendall(self->socket_event, (const void*) &lat, sizeof(double));
 	net_socket_sendall(self->socket_event, (const void*) &lon, sizeof(double));
 	net_socket_sendall(self->socket_event, (const void*) &accuracy, sizeof(float));

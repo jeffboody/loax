@@ -136,6 +136,7 @@ typedef struct
 
 typedef struct
 {
+	double utime;
 	double lat;
 	double lon;
 	float  accuracy;

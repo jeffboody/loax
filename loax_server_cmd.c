@@ -154,3 +154,17 @@ void loaxCmdGyroscopeDisable (void)
 
 	CALL_CMD(LOAX_CMD_GYROSCOPE_DISABLE);
 }
+
+void loaxCmdKeepScreenOnEnable (void)
+{
+	LOGD("debug");
+
+	CALL_CMD(LOAX_CMD_KEEPSCREENON_ENABLE);
+}
+
+void loaxCmdKeepScreenOnDisable (void)
+{
+	LOGD("debug");
+
+	CALL_CMD(LOAX_CMD_KEEPSCREENON_DISABLE);
+}

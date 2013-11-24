@@ -206,6 +206,8 @@ static loax_function_cb loax_cmd_map[] =
 	loaxCmdGpsDisable,
 	loaxCmdGyroscopeEnable,
 	loaxCmdGyroscopeDisable,
+	loaxCmdKeepScreenOnEnable,
+	loaxCmdKeepScreenOnDisable,
 };
 
 /***********************************************************

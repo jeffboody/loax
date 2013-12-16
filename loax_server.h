@@ -42,24 +42,32 @@ typedef struct
 loax_server_t* loax_server_new(loax_server_cmd_fn cmd_fn);
 void           loax_server_delete(loax_server_t** _self);
 void           loax_server_resize(loax_server_t* self, int w, int h);
-void           loax_server_keydown(loax_server_t* self, int keycode, int meta);
-void           loax_server_keyup(loax_server_t* self, int keycode, int meta);
-void           loax_server_axismove(loax_server_t* self, int id, int axis, float value);
-void           loax_server_buttondown(loax_server_t* self, int id, int keycode);
-void           loax_server_buttonup(loax_server_t* self, int id, int keycode);
+void           loax_server_keydown(loax_server_t* self, int keycode, int meta,
+                                      double utime);
+void           loax_server_keyup(loax_server_t* self, int keycode, int meta,
+                                      double utime);
+void           loax_server_axismove(loax_server_t* self, int id, int axis,
+                                    float value, double utime);
+void           loax_server_buttondown(loax_server_t* self, int id, int keycode,
+                                      double utime);
+void           loax_server_buttonup(loax_server_t* self, int id, int keycode,
+                                    double utime);
 void           loax_server_touch(loax_server_t* self, int action, int count,
-                                 float* coord);
+                                 float* coord, double utime);
 void           loax_server_accelerometer(loax_server_t* self,
                                          float ax, float ay, float az,
-                                         int   rotation);
+                                         int rotation, double utime);
 void           loax_server_magnetometer(loax_server_t* self,
-                                        float mx, float my, float mz);
+                                        float mx, float my, float mz,
+                                        double utime);
 void           loax_server_gps(loax_server_t* self,
                                double lat, double lon,
                                float accuracy, float altitude,
-                               float speed, float bearing);
+                               float speed, float bearing,
+                               double utime);
 void           loax_server_gyroscope(loax_server_t* self,
-                                     float ax, float ay, float az);
+                                     float ax, float ay, float az,
+                                     double utime);
 
 // TODO return value?
 int            loax_server_draw(loax_server_t* self);

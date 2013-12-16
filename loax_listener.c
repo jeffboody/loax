@@ -44,6 +44,9 @@ static void* loax_listener_thread(void* _self)
 	while(net_socket_recvall(self->socket_event, (void*) type,
 	                         sizeof(int), &recvd))
 	{
+		double* utime = &self->event_buffer[self->event_tail].utime;
+		ok &= net_socket_recvall(self->socket_event, (void*) utime,
+		                         sizeof(double), &recvd);
 		if(*type == LOAX_EVENT_RESIZE)
 		{
 			loax_eventresize_t* e = &self->event_buffer[self->event_tail].event_resize;
@@ -83,8 +86,6 @@ static void* loax_listener_thread(void* _self)
 		else if(*type == LOAX_EVENT_ACCELEROMETER)
 		{
 			loax_eventaccelerometer_t* e = &self->event_buffer[self->event_tail].event_accelerometer;
-			ok &= net_socket_recvall(self->socket_event, (void*) &e->utime,
-			                         sizeof(double), &recvd);
 			ok &= net_socket_recvall(self->socket_event, (void*) &e->ax,
 			                         sizeof(float), &recvd);
 			ok &= net_socket_recvall(self->socket_event, (void*) &e->ay,
@@ -97,8 +98,6 @@ static void* loax_listener_thread(void* _self)
 		else if(*type == LOAX_EVENT_MAGNETOMETER)
 		{
 			loax_eventmagnetometer_t* e = &self->event_buffer[self->event_tail].event_magnetometer;
-			ok &= net_socket_recvall(self->socket_event, (void*) &e->utime,
-			                         sizeof(double), &recvd);
 			ok &= net_socket_recvall(self->socket_event, (void*) &e->mx,
 			                         sizeof(float), &recvd);
 			ok &= net_socket_recvall(self->socket_event, (void*) &e->my,
@@ -109,8 +108,6 @@ static void* loax_listener_thread(void* _self)
 		else if(*type == LOAX_EVENT_GPS)
 		{
 			loax_eventgps_t* e = &self->event_buffer[self->event_tail].event_gps;
-			ok &= net_socket_recvall(self->socket_event, (void*) &e->utime,
-			                         sizeof(double), &recvd);
 			ok &= net_socket_recvall(self->socket_event, (void*) &e->lat,
 			                         sizeof(double), &recvd);
 			ok &= net_socket_recvall(self->socket_event, (void*) &e->lon,
@@ -127,8 +124,6 @@ static void* loax_listener_thread(void* _self)
 		else if(*type == LOAX_EVENT_GYROSCOPE)
 		{
 			loax_eventgyroscope_t* e = &self->event_buffer[self->event_tail].event_gyroscope;
-			ok &= net_socket_recvall(self->socket_event, (void*) &e->utime,
-			                         sizeof(double), &recvd);
 			ok &= net_socket_recvall(self->socket_event, (void*) &e->ax,
 			                         sizeof(float), &recvd);
 			ok &= net_socket_recvall(self->socket_event, (void*) &e->ay,

@@ -119,24 +119,21 @@ typedef struct
 
 typedef struct
 {
-	double utime;
-	float  ax;
-	float  ay;
-	float  az;
-	int    rotation;
+	float ax;
+	float ay;
+	float az;
+	int   rotation;
 } loax_eventaccelerometer_t;
 
 typedef struct
 {
-	double utime;
-	float  mx;
-	float  my;
-	float  mz;
+	float mx;
+	float my;
+	float mz;
 } loax_eventmagnetometer_t;
 
 typedef struct
 {
-	double utime;
 	double lat;
 	double lon;
 	float  accuracy;
@@ -147,10 +144,9 @@ typedef struct
 
 typedef struct
 {
-	double utime;
-	float  ax;
-	float  ay;
-	float  az;
+	float ax;
+	float ay;
+	float az;
 } loax_eventgyroscope_t;
 
 typedef struct
@@ -173,7 +169,8 @@ typedef struct
 
 typedef struct
 {
-	int type;
+	int    type;
+	double utime;
 	union
 	{
 		loax_eventkey_t           event_key;

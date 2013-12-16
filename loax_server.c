@@ -302,80 +302,93 @@ void loax_server_resize(loax_server_t* self, int w, int h)
 	self->w = w;
 	self->h = h;
 
-	int type = LOAX_EVENT_RESIZE;
+	int    type  = LOAX_EVENT_RESIZE;
+	double utime = a3d_utime();
 	net_socket_sendall(self->socket_event, (const void*) &type, sizeof(int));
+	net_socket_sendall(self->socket_event, (const void*) &utime, sizeof(double));
 	net_socket_sendall(self->socket_event, (const void*) &w, sizeof(int));
 	net_socket_sendall(self->socket_event, (const void*) &h, sizeof(int));
 	net_socket_flush(self->socket_event);
 }
 
-void loax_server_keydown(loax_server_t* self, int keycode, int meta)
+void loax_server_keydown(loax_server_t* self, int keycode, int meta,
+                         double utime)
 {
 	assert(self);
-	LOGD("debug keycode=0x%X, meta=0x%X", keycode, meta);
+	LOGD("debug keycode=0x%X, meta=0x%X, utime=%lf", keycode, meta, utime);
 
 	int type = LOAX_EVENT_KEYDOWN;
 	net_socket_sendall(self->socket_event, (const void*) &type, sizeof(int));
+	net_socket_sendall(self->socket_event, (const void*) &utime, sizeof(double));
 	net_socket_sendall(self->socket_event, (const void*) &keycode, sizeof(int));
 	net_socket_sendall(self->socket_event, (const void*) &meta, sizeof(int));
 	net_socket_flush(self->socket_event);
 }
 
-void loax_server_keyup(loax_server_t* self, int keycode, int meta)
+void loax_server_keyup(loax_server_t* self, int keycode, int meta,
+                       double utime)
 {
 	assert(self);
-	LOGD("debug keycode=0x%X, meta=0x%X", keycode, meta);
+	LOGD("debug keycode=0x%X, meta=0x%X, utime=%lf", keycode, meta, utime);
 
 	int type = LOAX_EVENT_KEYUP;
 	net_socket_sendall(self->socket_event, (const void*) &type, sizeof(int));
+	net_socket_sendall(self->socket_event, (const void*) &utime, sizeof(double));
 	net_socket_sendall(self->socket_event, (const void*) &keycode, sizeof(int));
 	net_socket_sendall(self->socket_event, (const void*) &meta, sizeof(int));
 	net_socket_flush(self->socket_event);
 }
 
-void loax_server_buttondown(loax_server_t* self, int id, int keycode)
+void loax_server_buttondown(loax_server_t* self, int id, int keycode,
+                            double utime)
 {
 	assert(self);
 	LOGD("debug id=%i, keycode=0x%X", id, keycode);
 
 	int type = LOAX_EVENT_BUTTONDOWN;
 	net_socket_sendall(self->socket_event, (const void*) &type, sizeof(int));
+	net_socket_sendall(self->socket_event, (const void*) &utime, sizeof(double));
 	net_socket_sendall(self->socket_event, (const void*) &keycode, sizeof(int));
 	net_socket_sendall(self->socket_event, (const void*) &id, sizeof(int));
 	net_socket_flush(self->socket_event);
 }
 
-void loax_server_buttonup(loax_server_t* self, int id, int keycode)
+void loax_server_buttonup(loax_server_t* self, int id, int keycode,
+                          double utime)
 {
 	assert(self);
-	LOGD("debug id=%i, keycode=0x%X", id, keycode);
+	LOGD("debug id=%i, keycode=0x%X, utime=%lf", id, keycode, utime);
 
 	int type = LOAX_EVENT_BUTTONUP;
 	net_socket_sendall(self->socket_event, (const void*) &type, sizeof(int));
+	net_socket_sendall(self->socket_event, (const void*) &utime, sizeof(double));
 	net_socket_sendall(self->socket_event, (const void*) &keycode, sizeof(int));
 	net_socket_sendall(self->socket_event, (const void*) &id, sizeof(int));
 	net_socket_flush(self->socket_event);
 }
 
-void loax_server_axismove(loax_server_t* self, int id, int axis, float value)
+void loax_server_axismove(loax_server_t* self, int id, int axis,
+                          float value, double utime)
 {
 	assert(self);
-	LOGD("debug id=%i, axis=0x%X, value=%f", id, axis, value);
+	LOGD("debug id=%i, axis=0x%X, value=%f, utime=%lf", id, axis, value, utime);
 
 	int type = LOAX_EVENT_AXISMOVE;
 	net_socket_sendall(self->socket_event, (const void*) &type, sizeof(int));
+	net_socket_sendall(self->socket_event, (const void*) &utime, sizeof(double));
 	net_socket_sendall(self->socket_event, (const void*) &id, sizeof(int));
 	net_socket_sendall(self->socket_event, (const void*) &axis, sizeof(int));
 	net_socket_sendall(self->socket_event, (const void*) &value, sizeof(float));
 	net_socket_flush(self->socket_event);
 }
 
-void loax_server_touch(loax_server_t* self, int action, int count, float* coord)
+void loax_server_touch(loax_server_t* self, int action, int count,
+                       float* coord, double utime)
 {
 	assert(self);
 	assert(coord);
-	LOGD("debug action=%i, count=%i, x0=%0.1f, y0=%0.1f, x1=%0.1f, y1=%0.1f",
-	     action, count, coord[0], coord[1], coord[2], coord[3]);
+	LOGD("debug action=%i, count=%i, x0=%0.1f, y0=%0.1f, x1=%0.1f, y1=%0.1f, utime=%lf",
+	     action, count, coord[0], coord[1], coord[2], coord[3], utime);
 
 	int type;
 	if(action == LOAX_ANDROID_MOTION_ACTION_DOWN)
@@ -409,6 +422,7 @@ void loax_server_touch(loax_server_t* self, int action, int count, float* coord)
 	}
 
 	net_socket_sendall(self->socket_event, (const void*) &type, sizeof(int));
+	net_socket_sendall(self->socket_event, (const void*) &utime, sizeof(double));
 	net_socket_sendall(self->socket_event, (const void*) &count, sizeof(int));
 
 	int i;
@@ -422,15 +436,13 @@ void loax_server_touch(loax_server_t* self, int action, int count, float* coord)
 
 void loax_server_accelerometer(loax_server_t* self,
                                float ax, float ay, float az,
-                               int rotation)
-
+                               int rotation, double utime)
 {
 	assert(self);
 	LOGD("debug ax=%f, ay=%f, az=%f", ax, ay, az);
-	LOGD("debug rotation=%i", rotation);
+	LOGD("debug rotation=%i, utime=%lf", rotation, utime);
 
-	int    type  = LOAX_EVENT_ACCELEROMETER;
-	double utime = a3d_utime();
+	int type = LOAX_EVENT_ACCELEROMETER;
 	net_socket_sendall(self->socket_event, (const void*) &type, sizeof(int));
 	net_socket_sendall(self->socket_event, (const void*) &utime, sizeof(double));
 	net_socket_sendall(self->socket_event, (const void*) &ax, sizeof(float));
@@ -441,13 +453,13 @@ void loax_server_accelerometer(loax_server_t* self,
 }
 
 void loax_server_magnetometer(loax_server_t* self,
-                              float mx, float my, float mz)
+                              float mx, float my, float mz,
+                              double utime)
 {
 	assert(self);
-	LOGD("debug mx=%f, my=%f, mz=%f", mx, my, mz);
+	LOGD("debug mx=%f, my=%f, mz=%f, utime=%lf", mx, my, mz, utime);
 
-	int    type  = LOAX_EVENT_MAGNETOMETER;
-	double utime = a3d_utime();
+	int type = LOAX_EVENT_MAGNETOMETER;
 	net_socket_sendall(self->socket_event, (const void*) &type, sizeof(int));
 	net_socket_sendall(self->socket_event, (const void*) &utime, sizeof(double));
 	net_socket_sendall(self->socket_event, (const void*) &mx, sizeof(float));
@@ -459,15 +471,15 @@ void loax_server_magnetometer(loax_server_t* self,
 void loax_server_gps(loax_server_t* self,
                      double lat, double lon,
                      float accuracy, float altitude,
-                     float speed, float bearing)
+                     float speed, float bearing,
+                     double utime)
 {
 	assert(self);
 	LOGD("debug lat=%lf, lon=%lf", lat, lon);
-	LOGD("debug accuracy=%f, altitude=%f, speed=%f, bearing=%f",
-	     accuracy, altitude, speed, bearing);
+	LOGD("debug accuracy=%f, altitude=%f, speed=%f, bearing=%f, utime=%lf",
+	     accuracy, altitude, speed, bearing, utime);
 
 	int type = LOAX_EVENT_GPS;
-	double utime = a3d_utime();
 	net_socket_sendall(self->socket_event, (const void*) &type, sizeof(int));
 	net_socket_sendall(self->socket_event, (const void*) &utime, sizeof(double));
 	net_socket_sendall(self->socket_event, (const void*) &lat, sizeof(double));
@@ -480,13 +492,13 @@ void loax_server_gps(loax_server_t* self,
 }
 
 void loax_server_gyroscope(loax_server_t* self,
-                           float ax, float ay, float az)
+                           float ax, float ay, float az,
+                           double utime)
 {
 	assert(self);
-	LOGD("debug ax=%f, ay=%f, az=%f", ax, ay, az);
+	LOGD("debug ax=%f, ay=%f, az=%f, utime=%lf", ax, ay, az, utime);
 
-	int    type  = LOAX_EVENT_GYROSCOPE;
-	double utime = a3d_utime();
+	int type = LOAX_EVENT_GYROSCOPE;
 	net_socket_sendall(self->socket_event, (const void*) &type, sizeof(int));
 	net_socket_sendall(self->socket_event, (const void*) &utime, sizeof(double));
 	net_socket_sendall(self->socket_event, (const void*) &ax, sizeof(float));

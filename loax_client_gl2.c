@@ -1430,6 +1430,7 @@ GL_APICALL void GL_APIENTRY glUniform3i (GLint location, GLint x, GLint y, GLint
 {
 	LOGD("debug");
 	SEND_INT(LOAX_Uniform3i);
+	SEND_INT(location);
 	SEND_INT(x);
 	SEND_INT(y);
 	SEND_INT(z);
@@ -1448,6 +1449,7 @@ GL_APICALL void GL_APIENTRY glUniform4f (GLint location, GLfloat x, GLfloat y, G
 {
 	LOGD("debug");
 	SEND_INT(LOAX_Uniform4f);
+	SEND_INT(location);
 	SEND_FLOAT(x);
 	SEND_FLOAT(y);
 	SEND_FLOAT(z);
@@ -1467,6 +1469,7 @@ GL_APICALL void GL_APIENTRY glUniform4i (GLint location, GLint x, GLint y, GLint
 {
 	LOGD("debug");
 	SEND_INT(LOAX_Uniform4i);
+	SEND_INT(location);
 	SEND_INT(x);
 	SEND_INT(y);
 	SEND_INT(z);

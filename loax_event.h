@@ -94,6 +94,8 @@
 #define LOAX_AXIS_Y1 0x01
 #define LOAX_AXIS_X2 0x0b
 #define LOAX_AXIS_Y2 0x0e
+#define LOAX_AXIS_HX 0x0f
+#define LOAX_AXIS_HY 0x10
 
 // max touch events supported
 #define LOAX_EVENT_TOUCHMAX 4

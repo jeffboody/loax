@@ -77,6 +77,8 @@ static const char* LOAX_AXISSTRING_X1 = "AX1";
 static const char* LOAX_AXISSTRING_Y1 = "AY1";
 static const char* LOAX_AXISSTRING_X2 = "AX2";
 static const char* LOAX_AXISSTRING_Y2 = "AY2";
+static const char* LOAX_AXISSTRING_HX = "AHX";
+static const char* LOAX_AXISSTRING_HY = "AHY";
 
 /***********************************************************
 * private                                                  *
@@ -137,5 +139,7 @@ const char* loax_eventaxis_axisstring(loax_eventaxis_t* self)
 	else if(a == LOAX_AXIS_Y1) return LOAX_AXISSTRING_Y1;
 	else if(a == LOAX_AXIS_X2) return LOAX_AXISSTRING_X2;
 	else if(a == LOAX_AXIS_Y2) return LOAX_AXISSTRING_Y2;
+	else if(a == LOAX_AXIS_HX) return LOAX_AXISSTRING_HX;
+	else if(a == LOAX_AXIS_HY) return LOAX_AXISSTRING_HY;
 	else                       return LOAX_STRING_UNKNOWN;
 }

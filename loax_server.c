@@ -218,6 +218,163 @@ static loax_function_cb loax_cmd_map[] =
 #define LOAX_ANDROID_MOTION_ACTION_UP   1
 #define LOAX_ANDROID_MOTION_ACTION_MOVE 2
 
+// shift keys
+static const char LOAX_SHIFTKEYS[128] =
+{
+	0x00,
+	0x01,
+	0x02,
+	0x03,
+	0x04,
+	0x05,
+	0x06,
+	0x07,
+	0x08,
+	0x09,
+	0x0A,
+	0x0B,
+	0x0C,
+	0x0D,
+	0x0E,
+	0x0F,
+	0x10,
+	0x11,
+	0x12,
+	0x13,
+	0x14,
+	0x15,
+	0x16,
+	0x17,
+	0x18,
+	0x19,
+	0x1A,
+	0x1B,
+	0x1C,
+	0x1D,
+	0x1E,
+	0x1F,
+	0x20,
+	0x21,
+	0x22,
+	0x23,
+	0x24,
+	0x25,
+	0x26,
+	'\"',
+	0x28,
+	0x29,
+	0x2A,
+	0x2B,
+	'<',
+	'_',
+	'>',
+	'?',
+	')',
+	'!',
+	'@',
+	'#',
+	'$',
+	'%',
+	'^',
+	'&',
+	'*',
+	'(',
+	0x3A,
+	':',
+	0x3C,
+	'+',
+	0x3E,
+	0x3F,
+	0x40,
+	0x41,
+	0x42,
+	0x43,
+	0x44,
+	0x45,
+	0x46,
+	0x47,
+	0x48,
+	0x49,
+	0x4A,
+	0x4B,
+	0x4C,
+	0x4D,
+	0x4E,
+	0x4F,
+	0x50,
+	0x51,
+	0x52,
+	0x53,
+	0x54,
+	0x55,
+	0x56,
+	0x57,
+	0x58,
+	0x59,
+	0x5A,
+	'{',
+	'|',
+	'}',
+	0x5E,
+	0x5F,
+	'~',
+	'A',
+	'B',
+	'C',
+	'D',
+	'E',
+	'F',
+	'G',
+	'H',
+	'I',
+	'J',
+	'K',
+	'L',
+	'M',
+	'N',
+	'O',
+	'P',
+	'Q',
+	'R',
+	'S',
+	'T',
+	'U',
+	'V',
+	'W',
+	'X',
+	'Y',
+	'Z',
+	0x7B,
+	0x7C,
+	0x7D,
+	0x7E,
+	0x7F,
+};
+
+static int loax_server_shiftkeycode(int keycode, int meta)
+{
+	LOGD("debug keycode=0x%X, meta=0x%X", keycode, meta);
+
+	if((keycode >= 0) && (keycode < 128))
+	{
+		int shiftchar = meta & (LOAX_KEY_SHIFT | LOAX_KEY_CAPS);
+		int shiftsym  = meta & LOAX_KEY_SHIFT;
+		if(shiftchar && (keycode >= 'a') && (keycode <= 'z'))
+		{
+			return LOAX_SHIFTKEYS[keycode];
+		}
+		else if(shiftsym)
+		{
+			return LOAX_SHIFTKEYS[keycode];
+		}
+	}
+	else if(keycode == LOAX_KEY_DELETE)
+	{
+		return LOAX_KEY_INSERT;
+	}
+	return keycode;
+}
+
 /***********************************************************
 * public                                                   *
 ***********************************************************/
@@ -317,6 +474,9 @@ void loax_server_keydown(loax_server_t* self, int keycode, int meta,
 	assert(self);
 	LOGD("debug keycode=0x%X, meta=0x%X, utime=%lf", keycode, meta, utime);
 
+	// if shift/caps is pressed change the keycode
+	keycode = loax_server_shiftkeycode(keycode, meta);
+
 	int type = LOAX_EVENT_KEYDOWN;
 	net_socket_sendall(self->socket_event, (const void*) &type, sizeof(int));
 	net_socket_sendall(self->socket_event, (const void*) &utime, sizeof(double));
@@ -330,6 +490,9 @@ void loax_server_keyup(loax_server_t* self, int keycode, int meta,
 {
 	assert(self);
 	LOGD("debug keycode=0x%X, meta=0x%X, utime=%lf", keycode, meta, utime);
+
+	// if shift/caps is pressed change the keycode
+	keycode = loax_server_shiftkeycode(keycode, meta);
 
 	int type = LOAX_EVENT_KEYUP;
 	net_socket_sendall(self->socket_event, (const void*) &type, sizeof(int));

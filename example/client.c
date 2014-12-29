@@ -49,10 +49,9 @@ int main(int argc, char** argv)
 			{
 				if(e.type == LOAX_EVENT_KEYUP)
 				{
-					LOGI("KEY: keycode=0x%X, meta=0x%X, key=%c",
-					     e.event_key.keycode,
-					     e.event_key.meta,
-					     (char) e.event_key.keycode);
+					const char* keystring = loax_eventkey_keystring(&e.event_key);
+					LOGI("KEY: keycode=0x%X, meta=0x%X, key=%s",
+					     e.event_key.keycode, e.event_key.meta, keystring);
 				}
 				else if(e.type == LOAX_EVENT_BUTTONUP)
 				{

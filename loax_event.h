@@ -51,6 +51,21 @@
 #define LOAX_KEY_SHIFT_R 0x00000080
 #define LOAX_KEY_CAPS    0x00100000
 
+// special keys
+#define LOAX_KEY_ENTER     0x00D
+#define LOAX_KEY_ESCAPE    0x01B
+#define LOAX_KEY_BACKSPACE 0x008
+#define LOAX_KEY_DELETE    0x07F
+#define LOAX_KEY_UP        0x100
+#define LOAX_KEY_DOWN      0x101
+#define LOAX_KEY_LEFT      0x102
+#define LOAX_KEY_RIGHT     0x103
+#define LOAX_KEY_HOME      0x104
+#define LOAX_KEY_END       0x105
+#define LOAX_KEY_PGUP      0x106
+#define LOAX_KEY_PGDOWN    0x107
+#define LOAX_KEY_INSERT    0x108
+
 // button ids
 #define LOAX_BUTTON_1      0xBC
 #define LOAX_BUTTON_2      0xBD
@@ -187,6 +202,7 @@ typedef struct
 	};
 } loax_event_t;
 
+const char* loax_eventkey_keystring(loax_eventkey_t* self);
 const char* loax_eventbutton_keystring(loax_eventbutton_t* self);
 const char* loax_eventaxis_axisstring(loax_eventaxis_t* self);
 

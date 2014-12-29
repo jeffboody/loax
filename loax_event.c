@@ -34,6 +34,139 @@
 
 static const char* LOAX_STRING_UNKNOWN = "UNKNOWN";
 
+// key strings
+static const char* LOAX_KEYSTRING[128] =
+{
+	"UNKNOWN",
+	"UNKNOWN",
+	"UNKNOWN",
+	"UNKNOWN",
+	"UNKNOWN",
+	"UNKNOWN",
+	"UNKNOWN",
+	"UNKNOWN",
+	"BACKSPACE",
+	"TAB",
+	"ENTER",
+	"UNKNOWN",
+	"UNKNOWN",
+	"UNKNOWN",
+	"UNKNOWN",
+	"UNKNOWN",
+	"UNKNOWN",
+	"UNKNOWN",
+	"UNKNOWN",
+	"UNKNOWN",
+	"UNKNOWN",
+	"UNKNOWN",
+	"UNKNOWN",
+	"UNKNOWN",
+	"UNKNOWN",
+	"UNKNOWN",
+	"UNKNOWN",
+	"ESC",
+	"UNKNOWN",
+	"UNKNOWN",
+	"UNKNOWN",
+	"UNKNOWN",
+	"SPACE",
+	"!",
+	"\"",
+	"#",
+	"$",
+	"%",
+	"&",
+	"'",
+	"(",
+	")",
+	"*",
+	"+",
+	",",
+	"-",
+	".",
+	"/",
+	"0",
+	"1",
+	"2",
+	"3",
+	"4",
+	"5",
+	"6",
+	"7",
+	"8",
+	"9",
+	":",
+	";",
+	"<",
+	"=",
+	">",
+	"?",
+	"@",
+	"A",
+	"B",
+	"C",
+	"D",
+	"E",
+	"F",
+	"G",
+	"H",
+	"I",
+	"J",
+	"K",
+	"L",
+	"M",
+	"N",
+	"O",
+	"P",
+	"Q",
+	"R",
+	"S",
+	"T",
+	"U",
+	"V",
+	"W",
+	"X",
+	"Y",
+	"Z",
+	"[",
+	"\\",
+	"]",
+	"^",
+	"_",
+	"`",
+	"a",
+	"b",
+	"c",
+	"d",
+	"e",
+	"f",
+	"g",
+	"h",
+	"i",
+	"j",
+	"k",
+	"l",
+	"m",
+	"n",
+	"o",
+	"p",
+	"q",
+	"r",
+	"s",
+	"t",
+	"u",
+	"v",
+	"w",
+	"x",
+	"y",
+	"z",
+	"{",
+	"|",
+	"}",
+	"~",
+	"DELETE",
+};
+
 // button strings
 static const char* LOAX_BUTTONSTRING_1       = "1";
 static const char* LOAX_BUTTONSTRING_2       = "2";
@@ -83,6 +216,52 @@ static const char* LOAX_AXISSTRING_HY = "AHY";
 /***********************************************************
 * private                                                  *
 ***********************************************************/
+
+const char* loax_eventkey_keystring(loax_eventkey_t* self)
+{
+	int k = self->keycode;
+	if((k >= 0) && (k < 128))
+	{
+		return LOAX_KEYSTRING[k];
+	}
+	else if(k == LOAX_KEY_UP)
+	{
+		return "UP";
+	}
+	else if(k == LOAX_KEY_DOWN)
+	{
+		return "DOWN";
+	}
+	else if(k == LOAX_KEY_LEFT)
+	{
+		return "LEFT";
+	}
+	else if(k == LOAX_KEY_RIGHT)
+	{
+		return "RIGHT";
+	}
+	else if(k == LOAX_KEY_HOME)
+	{
+		return "HOME";
+	}
+	else if(k == LOAX_KEY_END)
+	{
+		return "END";
+	}
+	else if(k == LOAX_KEY_PGUP)
+	{
+		return "PGUP";
+	}
+	else if(k == LOAX_KEY_PGDOWN)
+	{
+		return "PGDOWN";
+	}
+	else if(k == LOAX_KEY_INSERT)
+	{
+		return "INSERT";
+	}
+	return LOAX_STRING_UNKNOWN;
+}
 
 const char* loax_eventbutton_keystring(loax_eventbutton_t* self)
 {

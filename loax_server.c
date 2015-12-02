@@ -208,6 +208,8 @@ static loax_function_cb loax_cmd_map[] =
 	loaxCmdGyroscopeDisable,
 	loaxCmdKeepScreenOnEnable,
 	loaxCmdKeepScreenOnDisable,
+	loaxCmdPlayClick,
+	loaxCmdExit,
 };
 
 /***********************************************************

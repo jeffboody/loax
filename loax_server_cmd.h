@@ -34,5 +34,7 @@ void loaxCmdGyroscopeEnable (void);
 void loaxCmdGyroscopeDisable (void);
 void loaxCmdKeepScreenOnEnable (void);
 void loaxCmdKeepScreenOnDisable (void);
+void loaxCmdPlayClick (void);
+void loaxCmdExit (void);
 
 #endif

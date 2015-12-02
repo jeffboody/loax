@@ -168,3 +168,17 @@ void loaxCmdKeepScreenOnDisable (void)
 
 	CALL_CMD(LOAX_CMD_KEEPSCREENON_DISABLE);
 }
+
+void loaxCmdPlayClick (void)
+{
+	LOGD("debug");
+
+	CALL_CMD(LOAX_CMD_PLAY_CLICK);
+}
+
+void loaxCmdExit (void)
+{
+	LOGD("debug");
+
+	CALL_CMD(LOAX_CMD_EXIT);
+}

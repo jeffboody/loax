@@ -34,6 +34,8 @@
 #define LOAX_CMD_GYROSCOPE_DISABLE     0x00010007
 #define LOAX_CMD_KEEPSCREENON_ENABLE   0x00010008
 #define LOAX_CMD_KEEPSCREENON_DISABLE  0x00010009
-#define LOAX_CMD_MAX                   0x0001000A
+#define LOAX_CMD_PLAY_CLICK            0x0001000A
+#define LOAX_CMD_EXIT                  0x0001000B
+#define LOAX_CMD_MAX                   0x0001000C
 
 #endif

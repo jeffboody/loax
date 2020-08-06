@@ -24,7 +24,8 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <unistd.h>
-#include <a3d/a3d_time.h>
+#include "../a3d/a3d_time.h"
+#include "../net/net_socket.h"
 #include "gl2.h"
 #include "loax_event.h"
 #include "loax_gl2.h"

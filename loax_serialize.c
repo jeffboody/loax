@@ -24,6 +24,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <assert.h>
+#include "../net/net_socket.h"
 #include "gl2.h"
 #include "loax_gl2.h"
 #include "loax_serialize.h"

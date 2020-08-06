@@ -24,7 +24,7 @@
 #ifndef loax_serialize_H
 #define loax_serialize_H
 
-#include <net/net_socket.h>
+#include "../net/net_socket.h"
 
 int loax_serialize_sendchar(net_socket_t* s, char data);
 int loax_serialize_senduchar(net_socket_t* s, unsigned char data);

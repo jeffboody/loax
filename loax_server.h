@@ -24,7 +24,7 @@
 #ifndef loax_server_H
 #define loax_server_H
 
-#include <net/net_socket.h>
+#include "../net/net_socket.h"
 
 typedef void (*loax_server_cmd_fn)(int cmd);
 
